@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This publish profile is for local SQL Server deployment.
+Update the connection string and database name for your environment.
+-->
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseName>CollectionManagementDB</TargetDatabaseName>
+    <DeployScriptFileName>CollectionManagementDB.sql</DeployScriptFileName>
+    <TargetConnectionString>Data Source=(localdb)\MSSQLLocalDB;Integrated Security=True;Persist Security Info=False;Pooling=False;MultipleActiveResultSets=False;Connect Timeout=60;Encrypt=False;TrustServerCertificate=False</TargetConnectionString>
+    <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <BackupDatabaseBeforeChanges>False</BackupDatabaseBeforeChanges>
+    <AllowIncompatiblePlatform>False</AllowIncompatiblePlatform>
+    <CreateNewDatabase>True</CreateNewDatabase>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
+    <DoNotDropObjectTypes />
+    <GenerateSmartDefaults>True</GenerateSmartDefaults>
+    <AllowUnsafeRowLevelSecurityDataMovement>False</AllowUnsafeRowLevelSecurityDataMovement>
+    <IgnoreAnsiNulls>False</IgnoreAnsiNulls>
+    <IgnoreAuthorizer>False</IgnoreAuthorizer>
+    <IgnoreColumnCollation>False</IgnoreColumnCollation>
+    <IgnoreComments>False</IgnoreComments>
+    <IgnoreCryptographicProviderFilePath>True</IgnoreCryptographicProviderFilePath>
+    <IgnoreDdlTriggerOrder>False</IgnoreDdlTriggerOrder>
+    <IgnoreDdlTriggerState>False</IgnoreDdlTriggerState>
+    <IgnoreDefaultSchema>False</IgnoreDefaultSchema>
+    <IgnoreDmlTriggerOrder>False</IgnoreDmlTriggerOrder>
+    <IgnoreDmlTriggerState>False</IgnoreDmlTriggerState>
+    <IgnoreExtendedProperties>False</IgnoreExtendedProperties>
+    <IgnoreFileAndLogFilePath>True</IgnoreFileAndLogFilePath>
+    <IgnoreFilegroupPlacement>True</IgnoreFilegroupPlacement>
+    <IgnoreFileSize>True</IgnoreFileSize>
+    <IgnoreFillFactor>False</IgnoreFillFactor>
+    <IgnoreFullTextCatalogFilePath>True</IgnoreFullTextCatalogFilePath>
+    <IgnoreIdentitySeed>False</IgnoreIdentitySeed>
+    <IgnoreIncrement>False</IgnoreIncrement>
+    <IgnoreIndexOptions>False</IgnoreIndexOptions>
+    <IgnoreIndexPadding>False</IgnoreIndexPadding>
+    <IgnoreKeywordCasing>False</IgnoreKeywordCasing>
+    <IgnoreLockHintsOnIndexes>False</IgnoreLockHintsOnIndexes>
+    <IgnoreLoginSids>True</IgnoreLoginSids>
+    <IgnoreNotForReplication>False</IgnoreNotForReplication>
+    <IgnoreObjectPlacementOnPartitionScheme>True</IgnoreObjectPlacementOnPartitionScheme>
+    <IgnorePartitionSchemes>False</IgnorePartitionSchemes>
+    <IgnorePermissions>False</IgnorePermissions>
+    <IgnoreQuotedIdentifiers>False</IgnoreQuotedIdentifiers>
+    <IgnoreRoleMembership>False</IgnoreRoleMembership>
+    <IgnoreRouteLifetime>True</IgnoreRouteLifetime>
+    <IgnoreSemicolonBetweenStatements>False</IgnoreSemicolonBetweenStatements>
+    <IgnoreTableOptions>False</IgnoreTableOptions>
+    <IgnoreUserSettingsObjects>False</IgnoreUserSettingsObjects>
+    <IgnoreWhitespace>False</IgnoreWhitespace>
+    <IgnoreWithNocheckOnCheckConstraints>False</IgnoreWithNocheckOnCheckConstraints>
+    <IgnoreWithNocheckOnForeignKeys>False</IgnoreWithNocheckOnForeignKeys>
+    <VerifyCollationCompatibility>True</VerifyCollationCompatibility>
+    <UnmodifiableObjectWarnings>True</UnmodifiableObjectWarnings>
+    <TreatVerificationErrorsAsWarnings>False</TreatVerificationErrorsAsWarnings>
+    <ScriptRefreshModule>True</ScriptRefreshModule>
+    <ScriptNewConstraintValidation>True</ScriptNewConstraintValidation>
+    <ScriptFileSize>False</ScriptFileSize>
+    <ScriptDatabaseOptions>True</ScriptDatabaseOptions>
+    <ScriptDeployStateChecks>False</ScriptDeployStateChecks>
+    <RegisterDataTierApplication>False</RegisterDataTierApplication>
+    <PopulateFilesOnFileGroups>True</PopulateFilesOnFileGroups>
+    <NoAlterStatementsToChangeClrTypes>False</NoAlterStatementsToChangeClrTypes>
+    <IncludeTransactionalScripts>False</IncludeTransactionalScripts>
+    <IgnoreWithNocheckOnCheckConstraints>False</IgnoreWithNocheckOnCheckConstraints>
+    <DisableAndReenableDdlTriggers>True</DisableAndReenableDdlTriggers>
+    <DropDmlTriggersNotInSource>True</DropDmlTriggersNotInSource>
+    <DropExtendedPropertiesNotInSource>True</DropExtendedPropertiesNotInSource>
+    <DropIndexesNotInSource>True</DropIndexesNotInSource>
+    <DropPermissionsNotInSource>False</DropPermissionsNotInSource>
+    <DropRoleMembersNotInSource>False</DropRoleMembersNotInSource>
+    <DropStatisticsNotInSource>True</DropStatisticsNotInSource>
+    <DoNotDropObjectTypes />
+    <DoNotAlterChangeDataCaptureObjects>True</DoNotAlterChangeDataCaptureObjects>
+    <DoNotAlterReplicatedObjects>True</DoNotAlterReplicatedObjects>
+    <CommentOutSetVarDeclarations>False</CommentOutSetVarDeclarations>
+    <CompareUsingTargetCollation>False</CompareUsingTargetCollation>
+  </PropertyGroup>
+</Project>

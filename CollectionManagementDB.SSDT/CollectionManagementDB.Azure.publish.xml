@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This publish profile is for Azure SQL Database deployment.
+Update the connection string with your Azure SQL Database details.
+-->
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseName>CollectionManagementDB</TargetDatabaseName>
+    <DeployScriptFileName>CollectionManagementDB.sql</DeployScriptFileName>
+    <TargetConnectionString>Server=tcp:your-server.database.windows.net,1433;Initial Catalog=CollectionManagementDB;Persist Security Info=False;User ID=your-username;Password=your-password;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;</TargetConnectionString>
+    <ProfileVersionNumber>1</ProfileVersionNumber>
+    <BlockOnPossibleDataLoss>True</BlockOnPossibleDataLoss>
+    <BackupDatabaseBeforeChanges>False</BackupDatabaseBeforeChanges>
+    <AllowIncompatiblePlatform>False</AllowIncompatiblePlatform>
+    <CreateNewDatabase>False</CreateNewDatabase>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
+    <DoNotDropObjectTypes />
+    <GenerateSmartDefaults>True</GenerateSmartDefaults>
+    <AllowUnsafeRowLevelSecurityDataMovement>False</AllowUnsafeRowLevelSecurityDataMovement>
+    <IgnoreFileAndLogFilePath>True</IgnoreFileAndLogFilePath>
+    <IgnoreFilegroupPlacement>True</IgnoreFilegroupPlacement>
+    <IgnoreFileSize>True</IgnoreFileSize>
+    <IgnoreCryptographicProviderFilePath>True</IgnoreCryptographicProviderFilePath>
+    <IgnoreFullTextCatalogFilePath>True</IgnoreFullTextCatalogFilePath>
+    <IgnoreLoginSids>True</IgnoreLoginSids>
+    <IgnoreObjectPlacementOnPartitionScheme>True</IgnoreObjectPlacementOnPartitionScheme>
+    <IgnoreRouteLifetime>True</IgnoreRouteLifetime>
+    <VerifyCollationCompatibility>True</VerifyCollationCompatibility>
+    <UnmodifiableObjectWarnings>True</UnmodifiableObjectWarnings>
+    <TreatVerificationErrorsAsWarnings>False</TreatVerificationErrorsAsWarnings>
+    <ScriptRefreshModule>True</ScriptRefreshModule>
+    <ScriptNewConstraintValidation>True</ScriptNewConstraintValidation>
+    <ScriptDatabaseOptions>False</ScriptDatabaseOptions>
+    <ScriptDeployStateChecks>False</ScriptDeployStateChecks>
+    <RegisterDataTierApplication>False</RegisterDataTierApplication>
+  </PropertyGroup>
+</Project>
