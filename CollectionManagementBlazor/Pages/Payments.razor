@@ -1,0 +1,143 @@
+@page "/payments"
+@using CollectionManagementBlazor.Models
+@inject HttpClient Http
+
+<PageTitle>Payments</PageTitle>
+
+<h1>Payments</h1>
+
+<p>View and process payment transactions.</p>
+
+@if (payments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!payments.Any())
+{
+    <div class="alert alert-info">
+        <p>No payments found in the system.</p>
+    </div>
+}
+else
+{
+    <div class="mb-3">
+        <button class="btn btn-success">Record New Payment</button>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Date</th>
+                    <th>Borrower</th>
+                    <th>Account</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var payment in payments)
+                {
+                    <tr>
+                        <td>@payment.TransactionId</td>
+                        <td>@payment.PaymentDate.ToShortDateString()</td>
+                        <td>@payment.BorrowerName</td>
+                        <td>@payment.AccountNumber</td>
+                        <td>@payment.Amount.ToString("C")</td>
+                        <td>@payment.PaymentMethod</td>
+                        <td>
+                            <span class="badge @GetStatusBadgeClass(payment.Status)">@payment.Status</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">View Receipt</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mt-3">
+        <p><strong>Total Payments Today:</strong> @GetTotalPaymentsToday().ToString("C")</p>
+    </div>
+}
+
+@code {
+    private List<Payment> payments = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Replace with actual API call when endpoint is available
+        // For now, using sample data
+        payments = new List<Payment>
+        {
+            new Payment
+            {
+                Id = 1,
+                TransactionId = "TXN-001",
+                PaymentDate = DateTime.Now,
+                BorrowerName = "John Doe",
+                AccountNumber = "LN-001",
+                Amount = 1500,
+                PaymentMethod = "Bank Transfer",
+                Status = "Completed"
+            },
+            new Payment
+            {
+                Id = 2,
+                TransactionId = "TXN-002",
+                PaymentDate = DateTime.Now.AddDays(-1),
+                BorrowerName = "Jane Smith",
+                AccountNumber = "LN-002",
+                Amount = 2000,
+                PaymentMethod = "Check",
+                Status = "Completed"
+            },
+            new Payment
+            {
+                Id = 3,
+                TransactionId = "TXN-003",
+                PaymentDate = DateTime.Now,
+                BorrowerName = "Robert Johnson",
+                AccountNumber = "LN-003",
+                Amount = 500,
+                PaymentMethod = "Cash",
+                Status = "Pending"
+            }
+        };
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Completed" => "bg-success",
+            "Pending" => "bg-warning",
+            "Failed" => "bg-danger",
+            "Refunded" => "bg-secondary",
+            _ => "bg-info"
+        };
+    }
+
+    private decimal GetTotalPaymentsToday()
+    {
+        return payments
+            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed")
+            .Sum(p => p.Amount);
+    }
+
+    private class Payment
+    {
+        public int Id { get; set; }
+        public string TransactionId { get; set; } = string.Empty;
+        public DateTime PaymentDate { get; set; }
+        public string BorrowerName { get; set; } = string.Empty;
+        public string AccountNumber { get; set; } = string.Empty;
+        public decimal Amount { get; set; }
+        public string PaymentMethod { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+    }
+}

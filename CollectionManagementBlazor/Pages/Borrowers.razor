@@ -1,0 +1,79 @@
+@page "/borrowers"
+@using CollectionManagementBlazor.Models
+@inject HttpClient Http
+
+<PageTitle>Borrowers</PageTitle>
+
+<h1>Borrowers</h1>
+
+<p>Manage borrower information and profiles.</p>
+
+@if (borrowers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!borrowers.Any())
+{
+    <div class="alert alert-info">
+        <p>No borrowers found in the system.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var borrower in borrowers)
+                {
+                    <tr>
+                        <td>@borrower.Id</td>
+                        <td>@borrower.Name</td>
+                        <td>@borrower.Email</td>
+                        <td>@borrower.Phone</td>
+                        <td>
+                            <span class="badge bg-success">Active</span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Borrower> borrowers = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Replace with actual API call when endpoint is available
+        // For now, using sample data
+        borrowers = new List<Borrower>
+        {
+            new Borrower { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Phone = "555-0100" },
+            new Borrower { Id = 2, Name = "Jane Smith", Email = "jane.smith@example.com", Phone = "555-0101" },
+            new Borrower { Id = 3, Name = "Robert Johnson", Email = "robert.j@example.com", Phone = "555-0102" }
+        };
+    }
+
+    private class Borrower
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+    }
+}

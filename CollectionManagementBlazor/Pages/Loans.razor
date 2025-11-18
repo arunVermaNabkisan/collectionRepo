@@ -1,0 +1,122 @@
+@page "/loans"
+@using CollectionManagementBlazor.Models
+@inject HttpClient Http
+
+<PageTitle>Loans</PageTitle>
+
+<h1>Loans</h1>
+
+<p>Track and manage loan accounts.</p>
+
+@if (loans == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!loans.Any())
+{
+    <div class="alert alert-info">
+        <p>No loans found in the system.</p>
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Account #</th>
+                    <th>Borrower</th>
+                    <th>Amount</th>
+                    <th>Balance</th>
+                    <th>Status</th>
+                    <th>Due Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var loan in loans)
+                {
+                    <tr>
+                        <td>@loan.AccountNumber</td>
+                        <td>@loan.BorrowerName</td>
+                        <td>@loan.LoanAmount.ToString("C")</td>
+                        <td>@loan.Balance.ToString("C")</td>
+                        <td>
+                            <span class="badge @GetStatusBadgeClass(loan.Status)">@loan.Status</span>
+                        </td>
+                        <td>@loan.DueDate.ToShortDateString()</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">View</button>
+                            <button class="btn btn-sm btn-warning">Edit</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<Loan> loans = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Replace with actual API call when endpoint is available
+        // For now, using sample data
+        loans = new List<Loan>
+        {
+            new Loan
+            {
+                Id = 1,
+                AccountNumber = "LN-001",
+                BorrowerName = "John Doe",
+                LoanAmount = 50000,
+                Balance = 45000,
+                Status = "Current",
+                DueDate = DateTime.Now.AddDays(15)
+            },
+            new Loan
+            {
+                Id = 2,
+                AccountNumber = "LN-002",
+                BorrowerName = "Jane Smith",
+                LoanAmount = 75000,
+                Balance = 30000,
+                Status = "Current",
+                DueDate = DateTime.Now.AddDays(7)
+            },
+            new Loan
+            {
+                Id = 3,
+                AccountNumber = "LN-003",
+                BorrowerName = "Robert Johnson",
+                LoanAmount = 100000,
+                Balance = 95000,
+                Status = "Delinquent",
+                DueDate = DateTime.Now.AddDays(-5)
+            }
+        };
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Current" => "bg-success",
+            "Delinquent" => "bg-danger",
+            "PaidOff" => "bg-secondary",
+            _ => "bg-warning"
+        };
+    }
+
+    private class Loan
+    {
+        public int Id { get; set; }
+        public string AccountNumber { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public decimal LoanAmount { get; set; }
+        public decimal Balance { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+    }
+}
