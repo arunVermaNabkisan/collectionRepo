@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>CollectionManagementDB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{8B9A5D8E-3C2F-4B1E-9A5D-8E3C2F4B1E9A}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql150DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>CollectionManagementDB</RootNamespace>
+    <AssemblyName>CollectionManagementDB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <DefaultSchema>dbo</DefaultSchema>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Views" />
+    <Folder Include="StoredProcedures" />
+    <Folder Include="Sequences" />
+    <Folder Include="Security" />
+    <Folder Include="PostDeployment" />
+    <Folder Include="PreDeployment" />
+  </ItemGroup>
+  <!-- Tables -->
+  <ItemGroup>
+    <Build Include="Tables\AuditTrail.sql" />
+    <Build Include="Tables\BehavioralScoringRules.sql" />
+    <Build Include="Tables\CaseEscalationHistory.sql" />
+    <Build Include="Tables\CaseStatusHistory.sql" />
+    <Build Include="Tables\CaseStrategyAssignment.sql" />
+    <Build Include="Tables\CollectionCases.sql" />
+    <Build Include="Tables\CollectionStrategies.sql" />
+    <Build Include="Tables\CommunicationCampaigns.sql" />
+    <Build Include="Tables\CommunicationTemplates.sql" />
+    <Build Include="Tables\ComplianceChecklist.sql" />
+    <Build Include="Tables\CustomerBehavioralScores.sql" />
+    <Build Include="Tables\CustomerInteractions.sql" />
+    <Build Include="Tables\Customers.sql" />
+    <Build Include="Tables\DPDBucketConfiguration.sql" />
+    <Build Include="Tables\DataSyncLog.sql" />
+    <Build Include="Tables\DocumentAccessLog.sql" />
+    <Build Include="Tables\Documents.sql" />
+    <Build Include="Tables\EmailLogs.sql" />
+    <Build Include="Tables\ErrorLog.sql" />
+    <Build Include="Tables\EscalationRules.sql" />
+    <Build Include="Tables\ExternalRecoveryAgencies.sql" />
+    <Build Include="Tables\FieldAgentLocationTracking.sql" />
+    <Build Include="Tables\FieldVisitEvidence.sql" />
+    <Build Include="Tables\FieldVisitExpenses.sql" />
+    <Build Include="Tables\FieldVisitRoutes.sql" />
+    <Build Include="Tables\FieldVisits.sql" />
+    <Build Include="Tables\LoanAccounts.sql" />
+    <Build Include="Tables\NotificationQueue.sql" />
+    <Build Include="Tables\PTPStatusHistory.sql" />
+    <Build Include="Tables\PaymentAllocation.sql" />
+    <Build Include="Tables\PaymentLinks.sql" />
+    <Build Include="Tables\PaymentTransactions.sql" />
+    <Build Include="Tables\PromiseToPay.sql" />
+    <Build Include="Tables\Roles.sql" />
+    <Build Include="Tables\RouteVisitMapping.sql" />
+    <Build Include="Tables\SMSLogs.sql" />
+    <Build Include="Tables\SettlementProposals.sql" />
+    <Build Include="Tables\SystemConfiguration.sql" />
+    <Build Include="Tables\TeamMemberHistory.sql" />
+    <Build Include="Tables\Teams.sql" />
+    <Build Include="Tables\UserPerformanceMetrics.sql" />
+    <Build Include="Tables\UserSessionLogs.sql" />
+    <Build Include="Tables\Users.sql" />
+    <Build Include="Tables\VoiceCallLogs.sql" />
+    <Build Include="Tables\WhatsAppLogs.sql" />
+    <Build Include="Tables\WorkflowExecutionLog.sql" />
+    <Build Include="Tables\WorkflowRules.sql" />
+  </ItemGroup>
+  <!-- Views -->
+  <ItemGroup>
+    <Build Include="Views\vw_ActiveCasesDetail.sql" />
+    <Build Include="Views\vw_FieldVisitSummary.sql" />
+    <Build Include="Views\vw_PTPDashboard.sql" />
+    <Build Include="Views\vw_PaymentSummary.sql" />
+  </ItemGroup>
+  <!-- Stored Procedures -->
+  <ItemGroup>
+    <Build Include="StoredProcedures\sp_CreatePromiseToPay.sql" />
+    <Build Include="StoredProcedures\sp_GetAgentWorklist.sql" />
+    <Build Include="StoredProcedures\sp_GetCaseDetailsByCaseID.sql" />
+    <Build Include="StoredProcedures\sp_GetDashboardMetrics.sql" />
+    <Build Include="StoredProcedures\sp_RecordPayment.sql" />
+  </ItemGroup>
+  <!-- Sequences -->
+  <ItemGroup>
+    <Build Include="Sequences\seq_PTPNumber.sql" />
+    <Build Include="Sequences\seq_PaymentNumber.sql" />
+  </ItemGroup>
+  <!-- Post-Deployment Scripts -->
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />
+    <None Include="PostDeployment\SeedData_DPDBucketConfiguration.sql" />
+    <None Include="PostDeployment\SeedData_Roles.sql" />
+    <None Include="PostDeployment\SeedData_SystemConfiguration.sql" />
+  </ItemGroup>
+</Project>
