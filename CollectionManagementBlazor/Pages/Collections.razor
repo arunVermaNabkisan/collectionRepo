@@ -1,0 +1,205 @@
+@page "/collections"
+@using CollectionManagementBlazor.Models
+@inject HttpClient Http
+
+<PageTitle>Collections</PageTitle>
+
+<h1>Collections</h1>
+
+<p>Manage collection cases and activities.</p>
+
+@if (collectionCases == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!collectionCases.Any())
+{
+    <div class="alert alert-info">
+        <p>No collection cases found in the system.</p>
+    </div>
+}
+else
+{
+    <div class="mb-3">
+        <button class="btn btn-primary">Create New Case</button>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="card text-white bg-danger">
+                <div class="card-body">
+                    <h5 class="card-title">Critical</h5>
+                    <p class="card-text fs-3">@GetCaseCountByPriority("Critical")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">High</h5>
+                    <p class="card-text fs-3">@GetCaseCountByPriority("High")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title">Medium</h5>
+                    <p class="card-text fs-3">@GetCaseCountByPriority("Medium")</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-secondary">
+                <div class="card-body">
+                    <h5 class="card-title">Low</h5>
+                    <p class="card-text fs-3">@GetCaseCountByPriority("Low")</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Case ID</th>
+                    <th>Borrower</th>
+                    <th>Account</th>
+                    <th>Days Overdue</th>
+                    <th>Amount Due</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Assigned To</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var collectionCase in collectionCases)
+                {
+                    <tr>
+                        <td>@collectionCase.CaseId</td>
+                        <td>@collectionCase.BorrowerName</td>
+                        <td>@collectionCase.AccountNumber</td>
+                        <td>@collectionCase.DaysOverdue</td>
+                        <td>@collectionCase.AmountDue.ToString("C")</td>
+                        <td>
+                            <span class="badge @GetPriorityBadgeClass(collectionCase.Priority)">@collectionCase.Priority</span>
+                        </td>
+                        <td>
+                            <span class="badge @GetStatusBadgeClass(collectionCase.Status)">@collectionCase.Status</span>
+                        </td>
+                        <td>@collectionCase.AssignedTo</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">View</button>
+                            <button class="btn btn-sm btn-success">Contact</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private List<CollectionCase> collectionCases = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Replace with actual API call when endpoint is available
+        // For now, using sample data
+        collectionCases = new List<CollectionCase>
+        {
+            new CollectionCase
+            {
+                Id = 1,
+                CaseId = "CC-001",
+                BorrowerName = "Robert Johnson",
+                AccountNumber = "LN-003",
+                DaysOverdue = 45,
+                AmountDue = 5000,
+                Priority = "Critical",
+                Status = "Open",
+                AssignedTo = "Agent Smith"
+            },
+            new CollectionCase
+            {
+                Id = 2,
+                CaseId = "CC-002",
+                BorrowerName = "Michael Brown",
+                AccountNumber = "LN-004",
+                DaysOverdue = 30,
+                AmountDue = 3500,
+                Priority = "High",
+                Status = "In Progress",
+                AssignedTo = "Agent Jones"
+            },
+            new CollectionCase
+            {
+                Id = 3,
+                CaseId = "CC-003",
+                BorrowerName = "Sarah Williams",
+                AccountNumber = "LN-005",
+                DaysOverdue = 15,
+                AmountDue = 2000,
+                Priority = "Medium",
+                Status = "Open",
+                AssignedTo = "Agent Davis"
+            },
+            new CollectionCase
+            {
+                Id = 4,
+                CaseId = "CC-004",
+                BorrowerName = "David Miller",
+                AccountNumber = "LN-006",
+                DaysOverdue = 7,
+                AmountDue = 1500,
+                Priority = "Low",
+                Status = "Open",
+                AssignedTo = "Agent Wilson"
+            }
+        };
+    }
+
+    private string GetPriorityBadgeClass(string priority)
+    {
+        return priority switch
+        {
+            "Critical" => "bg-danger",
+            "High" => "bg-warning",
+            "Medium" => "bg-info",
+            "Low" => "bg-secondary",
+            _ => "bg-light"
+        };
+    }
+
+    private string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Open" => "bg-primary",
+            "In Progress" => "bg-warning",
+            "Resolved" => "bg-success",
+            "Closed" => "bg-secondary",
+            _ => "bg-light"
+        };
+    }
+
+    private int GetCaseCountByPriority(string priority)
+    {
+        return collectionCases.Count(c => c.Priority == priority);
+    }
+
+    private class CollectionCase
+    {
+        public int Id { get; set; }
+        public string CaseId { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public string AccountNumber { get; set; } = string.Empty;
+        public int DaysOverdue { get; set; }
+        public decimal AmountDue { get; set; }
+        public string Priority { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string AssignedTo { get; set; } = string.Empty;
+    }
+}
