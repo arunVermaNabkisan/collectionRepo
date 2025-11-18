@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NABKISAN CMS - Web UI Mockups</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #f5f6fa;
+            color: #2c3e50;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .mockup-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .mockup-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .screen-container {
+            border: 2px solid #e1e4e8;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .browser-bar {
+            background: #f6f8fa;
+            padding: 10px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .browser-dots {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        
+        .url-bar {
+            flex: 1;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #e1e4e8;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .screen-content {
+            padding: 0;
+            background: #f8f9fa;
+            min-height: 600px;
+        }
+        
+        /* Application Styles */
+        .app-header {
+            background: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .app-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            color: #667eea;
+        }
+        
+        .app-nav {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-item {
+            color: #666;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .nav-item.active,
+        .nav-item:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            font-size: 10px;
+            padding: 2px 5px;
+            border-radius: 10px;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .metric-label {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .metric-change {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .metric-change.positive {
+            background: #d4f8d4;
+            color: #27ae60;
+        }
+        
+        .metric-change.negative {
+            background: #ffd4d4;
+            color: #e74c3c;
+        }
+        
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #5a67d8;
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: #666;
+            border: 1px solid #e1e4e8;
+        }
+        
+        .btn-secondary:hover {
+            background: #f8f9fa;
+        }
+        
+        .search-box {
+            padding: 8px 12px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            width: 250px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #f1f3f5;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #d4f8d4;
+            color: #27ae60;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #f39c12;
+        }
+        
+        .status-overdue {
+            background: #ffd4d4;
+            color: #e74c3c;
+        }
+        
+        .customer-360 {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        .customer-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .customer-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            margin: 0 auto 20px;
+        }
+        
+        .customer-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .customer-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .customer-id {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .info-section {
+            margin-bottom: 25px;
+        }
+        
+        .info-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .info-label {
+            color: #666;
+        }
+        
+        .info-value {
+            color: #333;
+            font-weight: 500;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 2px solid #e1e4e8;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 0;
+            color: #666;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+        
+        .action-bar {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .quick-action {
+            padding: 10px 20px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .timeline {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .timeline-marker {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #667eea;
+            margin-top: 5px;
+            position: relative;
+        }
+        
+        .timeline-item:not(:last-child) .timeline-marker::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 4px;
+            width: 2px;
+            height: 40px;
+            background: #e1e4e8;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-time {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-description {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .field-visit {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .visit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .visit-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .visit-map {
+            height: 300px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .visit-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .visit-info-box {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        
+        .visit-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .visit-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="mockup-header">
+            <h1>NABKISAN Collection Management System</h1>
+            <p>Web Application UI Mockups</p>
+            <p style="margin-top: 10px; opacity: 0.9;">Comprehensive interface designs for Relationship Managers, Supervisors, and Management</p>
+        </div>
+
+        <!-- 1. Login Screen -->
+        <div class="mockup-section">
+            <h2>1. Login Screen</h2>
+            <p>Secure authentication interface with role-based access control</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/login</div>
+                </div>
+                <div class="screen-content" style="display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <div style="background: white; padding: 40px; border-radius: 10px; width: 400px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+                        <h2 style="text-align: center; margin-bottom: 30px; color: #333;">NABKISAN CMS</h2>
+                        <div class="form-group">
+                            <label class="form-label">Employee ID</label>
+                            <input type="text" class="form-control" placeholder="Enter your employee ID">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" placeholder="Enter your password">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select class="form-control">
+                                <option>Relationship Manager</option>
+                                <option>Team Leader/Supervisor</option>
+                                <option>Business Line Vertical Head</option>
+                                <option>Senior Management</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">Sign In</button>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a href="#" style="color: #667eea; text-decoration: none; font-size: 14px;">Forgot Password?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. RM Dashboard -->
+        <div class="mockup-section">
+            <h2>2. Relationship Manager Dashboard</h2>
+            <p>Primary workspace for RMs showing assigned cases, performance metrics, and quick actions</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/dashboard</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item active">Dashboard</a>
+                            <a href="#" class="nav-item">Cases</a>
+                            <a href="#" class="nav-item">Field Visits</a>
+                            <a href="#" class="nav-item">Communications</a>
+                            <a href="#" class="nav-item">Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">
+                                🔔
+                                <span class="notification-badge">3</span>
+                            </div>
+                            <div class="user-avatar">RM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-label">Total Cases</div>
+                            <div class="metric-value">247</div>
+                            <span class="metric-change positive">+12 from yesterday</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Amount Collected Today</div>
+                            <div class="metric-value">₹4.2L</div>
+                            <span class="metric-change positive">+23% vs target</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">PTP Success Rate</div>
+                            <div class="metric-value">68%</div>
+                            <span class="metric-change negative">-5% from last week</span>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-label">Contact Rate</div>
+                            <div class="metric-value">42%</div>
+                            <span class="metric-change positive">+3% improvement</span>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 0 20px;">
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h3>Priority Cases - Immediate Action Required</h3>
+                                <div class="table-actions">
+                                    <input type="text" class="search-box" placeholder="Search cases...">
+                                    <button class="btn btn-secondary">Filter</button>
+                                    <button class="btn btn-primary">Export</button>
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Case ID</th>
+                                        <th>Customer Name</th>
+                                        <th>Loan Account</th>
+                                        <th>Outstanding</th>
+                                        <th>DPD</th>
+                                        <th>Last Contact</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>#C2024001</td>
+                                        <td>Rajesh Kumar</td>
+                                        <td>AL-FPO-2023-0456</td>
+                                        <td>₹85,000</td>
+                                        <td>45</td>
+                                        <td>2 days ago</td>
+                                        <td><span class="status-badge status-overdue">Overdue</span></td>
+                                        <td>
+                                            <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#C2024002</td>
+                                        <td>Priya Sharma</td>
+                                        <td>AL-AVCF-2023-0789</td>
+                                        <td>₹1,25,000</td>
+                                        <td>30</td>
+                                        <td>Today</td>
+                                        <td><span class="status-badge status-pending">PTP Active</span></td>
+                                        <td>
+                                            <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>#C2024003</td>
+                                        <td>Amit Patel</td>
+                                        <td>AL-CORP-2023-0234</td>
+                                        <td>₹3,50,000</td>
+                                        <td>60</td>
+                                        <td>5 days ago</td>
+                                        <td><span class="status-badge status-overdue">Field Visit</span></td>
+                                        <td>
+                                            <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Customer 360 View -->
+        <div class="mockup-section">
+            <h2>3. Customer 360-Degree View</h2>
+            <p>Comprehensive customer information interface with all relevant details for collection</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/customer/C2024001</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item">Dashboard</a>
+                            <a href="#" class="nav-item active">Cases</a>
+                            <a href="#" class="nav-item">Field Visits</a>
+                            <a href="#" class="nav-item">Communications</a>
+                            <a href="#" class="nav-item">Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">🔔</div>
+                            <div class="user-avatar">RM</div>
+                        </div>
+                    </div>
+                    
+                    <div class="customer-360">
+                        <div class="customer-sidebar">
+                            <div class="customer-avatar">RK</div>
+                            <div class="customer-info">
+                                <div class="customer-name">Rajesh Kumar</div>
+                                <div class="customer-id">CIF: 2023456789</div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">Contact Information</div>
+                                <div class="info-row">
+                                    <span class="info-label">Mobile:</span>
+                                    <span class="info-value">+91 98765 43210</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Alt Mobile:</span>
+                                    <span class="info-value">+91 87654 32109</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Email:</span>
+                                    <span class="info-value">rajesh.k@email.com</span>
+                                </div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">Loan Details</div>
+                                <div class="info-row">
+                                    <span class="info-label">Product:</span>
+                                    <span class="info-value">FPO Loan</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Loan Amount:</span>
+                                    <span class="info-value">₹2,00,000</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Outstanding:</span>
+                                    <span class="info-value" style="color: #e74c3c;">₹85,000</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">EMI:</span>
+                                    <span class="info-value">₹15,000</span>
+                                </div>
+                            </div>
+                            
+                            <div class="info-section">
+                                <div class="info-title">Delinquency Status</div>
+                                <div class="info-row">
+                                    <span class="info-label">DPD:</span>
+                                    <span class="info-value" style="color: #e74c3c;">45 Days</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Bucket:</span>
+                                    <span class="info-value">Bucket 2</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Risk Score:</span>
+                                    <span class="info-value">72/100</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="flex: 1;">
+                            <div class="action-bar">
+                                <button class="quick-action btn-primary">
+                                    📞 Call Customer
+                                </button>
+                                <button class="quick-action btn-secondary">
+                                    💬 Send SMS
+                                </button>
+                                <button class="quick-action btn-secondary">
+                                    📧 Send Email
+                                </button>
+                                <button class="quick-action btn-secondary">
+                                    🔗 Generate Payment Link
+                                </button>
+                                <button class="quick-action btn-secondary">
+                                    📄 Real-time SOA
+                                </button>
+                                <button class="quick-action btn-secondary">
+                                    🏠 Schedule Field Visit
+                                </button>
+                            </div>
+                            
+                            <div style="background: white; border-radius: 8px; padding: 20px;">
+                                <div class="tabs">
+                                    <div class="tab active">Interaction History</div>
+                                    <div class="tab">Payment History</div>
+                                    <div class="tab">PTP History</div>
+                                    <div class="tab">Documents</div>
+                                    <div class="tab">Field Visits</div>
+                                </div>
+                                
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">Today, 10:30 AM</div>
+                                            <div class="timeline-title">Call Attempted - No Answer</div>
+                                            <div class="timeline-description">Customer did not answer. Will retry in evening.</div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">Yesterday, 3:45 PM</div>
+                                            <div class="timeline-title">SMS Sent - Payment Reminder</div>
+                                            <div class="timeline-description">Reminder for overdue payment of ₹15,000. Message delivered.</div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">3 days ago, 11:00 AM</div>
+                                            <div class="timeline-title">PTP Recorded</div>
+                                            <div class="timeline-description">Customer promised to pay ₹10,000 by 25th Nov. Status: Broken</div>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker"></div>
+                                        <div class="timeline-content">
+                                            <div class="timeline-time">5 days ago, 2:30 PM</div>
+                                            <div class="timeline-title">Successful Call - Spoke to Customer</div>
+                                            <div class="timeline-description">Discussed payment options. Customer facing temporary cash flow issues.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. PTP Recording Modal -->
+        <div class="mockup-section">
+            <h2>4. Promise to Pay (PTP) Recording Interface</h2>
+            <p>Modal interface for recording single or split payment promises</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/customer/C2024001/ptp</div>
+                </div>
+                <div class="screen-content" style="background: rgba(0,0,0,0.1); padding: 40px;">
+                    <div class="modal" style="position: relative; transform: none; top: 0; left: 0; margin: 0 auto;">
+                        <div class="modal-header">
+                            <h3 class="modal-title">Record Promise to Pay</h3>
+                            <button class="close-btn">×</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Customer: Rajesh Kumar (CIF: 2023456789)</label>
+                            <div style="padding: 10px; background: #f8f9fa; border-radius: 6px; margin-top: 5px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                                    <span>Total Outstanding:</span>
+                                    <strong>₹85,000</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <span>Minimum Payment Required:</span>
+                                    <strong>₹15,000</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Payment Type</label>
+                            <select class="form-control">
+                                <option>Single Payment</option>
+                                <option selected>Split Payment</option>
+                            </select>
+                        </div>
+                        
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 6px; margin-bottom: 20px;">
+                            <h4 style="margin-bottom: 15px;">Split Payment Details</h4>
+                            
+                            <div class="form-row" style="margin-bottom: 15px;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label class="form-label">Payment 1</label>
+                                    <input type="number" class="form-control" value="10000" placeholder="Amount">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-control" value="2024-11-20">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row" style="margin-bottom: 15px;">
+                                <div class="form-group" style="margin: 0;">
+                                    <label class="form-label">Payment 2</label>
+                                    <input type="number" class="form-control" value="5000" placeholder="Amount">
+                                </div>
+                                <div class="form-group" style="margin: 0;">
+                                    <label class="form-label">Date</label>
+                                    <input type="date" class="form-control" value="2024-11-25">
+                                </div>
+                            </div>
+                            
+                            <button class="btn btn-secondary" style="width: 100%;">+ Add Another Split</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Confidence Score</label>
+                            <select class="form-control">
+                                <option>High - Customer seems genuine</option>
+                                <option selected>Medium - Some doubt exists</option>
+                                <option>Low - Unlikely to keep promise</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Notes</label>
+                            <textarea class="form-control" rows="3" placeholder="Add any additional notes about this PTP...">Customer mentioned salary credit expected on 20th. Will pay immediately after receiving.</textarea>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-secondary">Cancel</button>
+                            <button class="btn btn-primary">Save PTP</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 5. Field Visit Management -->
+        <div class="mockup-section">
+            <h2>5. Field Visit Management Interface</h2>
+            <p>Schedule and track field visits with GPS monitoring</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/field-visits</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item">Dashboard</a>
+                            <a href="#" class="nav-item">Cases</a>
+                            <a href="#" class="nav-item active">Field Visits</a>
+                            <a href="#" class="nav-item">Communications</a>
+                            <a href="#" class="nav-item">Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">🔔</div>
+                            <div class="user-avatar">RM</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px;">
+                        <div class="field-visit">
+                            <div class="visit-header">
+                                <h3>Today's Field Visits</h3>
+                                <div class="visit-status">
+                                    <span class="status-badge status-active">3 Pending</span>
+                                    <span class="status-badge status-active">2 Completed</span>
+                                    <button class="btn btn-primary">Plan Route</button>
+                                </div>
+                            </div>
+                            
+                            <div class="visit-map">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 48px; margin-bottom: 10px;">🗺️</div>
+                                    <p>Interactive Map View</p>
+                                    <p style="font-size: 14px;">Shows optimized route with all visit locations</p>
+                                </div>
+                            </div>
+                            
+                            <div class="visit-details">
+                                <div class="visit-info-box">
+                                    <div class="visit-label">Total Distance</div>
+                                    <div class="visit-value">24.5 km</div>
+                                </div>
+                                <div class="visit-info-box">
+                                    <div class="visit-label">Est. Time</div>
+                                    <div class="visit-value">3 hrs 20 min</div>
+                                </div>
+                                <div class="visit-info-box">
+                                    <div class="visit-label">Priority Cases</div>
+                                    <div class="visit-value">2 High, 3 Medium</div>
+                                </div>
+                                <div class="visit-info-box">
+                                    <div class="visit-label">Total Outstanding</div>
+                                    <div class="visit-value">₹4.75 Lakhs</div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-table" style="margin-top: 20px;">
+                                <div class="table-header">
+                                    <h4>Visit Schedule</h4>
+                                </div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Order</th>
+                                            <th>Customer</th>
+                                            <th>Address</th>
+                                            <th>Outstanding</th>
+                                            <th>Priority</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Amit Patel</td>
+                                            <td>123, MG Road, Sector 5</td>
+                                            <td>₹3,50,000</td>
+                                            <td><span class="status-badge status-overdue">High</span></td>
+                                            <td><span class="status-badge status-active">✓ Completed</span></td>
+                                            <td>
+                                                <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View Report</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Sunita Devi</td>
+                                            <td>45, Village Road, Block A</td>
+                                            <td>₹75,000</td>
+                                            <td><span class="status-badge status-pending">Medium</span></td>
+                                            <td><span class="status-badge status-active">✓ Completed</span></td>
+                                            <td>
+                                                <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View Report</button>
+                                            </td>
+                                        </tr>
+                                        <tr style="background: #fff9e6;">
+                                            <td>3</td>
+                                            <td>Rajesh Kumar</td>
+                                            <td>78, Farm House, Village XYZ</td>
+                                            <td>₹85,000</td>
+                                            <td><span class="status-badge status-overdue">High</span></td>
+                                            <td><span class="status-badge status-pending">In Progress</span></td>
+                                            <td>
+                                                <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Check In</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 6. Supervisor Dashboard -->
+        <div class="mockup-section">
+            <h2>6. Team Leader/Supervisor Dashboard</h2>
+            <p>Team performance monitoring and management interface</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/supervisor/dashboard</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS - Supervisor View
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item active">Team Dashboard</a>
+                            <a href="#" class="nav-item">Case Allocation</a>
+                            <a href="#" class="nav-item">Performance</a>
+                            <a href="#" class="nav-item">Quality Audit</a>
+                            <a href="#" class="nav-item">Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">🔔</div>
+                            <div class="user-avatar">TL</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px;">
+                        <h3 style="margin-bottom: 20px;">Team Performance Overview - FPO Division</h3>
+                        
+                        <div class="dashboard-grid">
+                            <div class="metric-card">
+                                <div class="metric-label">Team Collection MTD</div>
+                                <div class="metric-value">₹42.5L</div>
+                                <span class="metric-change positive">85% of target</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Active RMs</div>
+                                <div class="metric-value">8/10</div>
+                                <span class="metric-change negative">2 on leave</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Avg Resolution Rate</div>
+                                <div class="metric-value">34%</div>
+                                <span class="metric-change positive">+5% from last month</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Cases Requiring Escalation</div>
+                                <div class="metric-value">23</div>
+                                <span class="metric-change negative">Immediate attention</span>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table">
+                            <div class="table-header">
+                                <h4>Relationship Manager Performance</h4>
+                                <div class="table-actions">
+                                    <button class="btn btn-secondary">Reallocate Cases</button>
+                                    <button class="btn btn-primary">Download Report</button>
+                                </div>
+                            </div>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>RM Name</th>
+                                        <th>Total Cases</th>
+                                        <th>Completed Today</th>
+                                        <th>Contact Rate</th>
+                                        <th>Collection (Today)</th>
+                                        <th>PTP Success</th>
+                                        <th>Performance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Ashish Goyal</td>
+                                        <td>32</td>
+                                        <td>18</td>
+                                        <td>56%</td>
+                                        <td>₹2.3L</td>
+                                        <td>72%</td>
+                                        <td><span class="status-badge status-active">Excellent</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Priya Mehta</td>
+                                        <td>28</td>
+                                        <td>15</td>
+                                        <td>48%</td>
+                                        <td>₹1.8L</td>
+                                        <td>65%</td>
+                                        <td><span class="status-badge status-active">Good</span></td>
+                                        <td>
+                                            <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View Details</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rahul Singh</td>
+                                        <td>35</td>
+                                        <td>12</td>
+                                        <td>34%</td>
+                                        <td>₹0.9L</td>
+                                        <td>45%</td>
+                                        <td><span class="status-badge status-pending">Needs Improvement</span></td>
+                                        <td>
+                                            <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;">Coach</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                            <div class="data-table">
+                                <div class="table-header">
+                                    <h4>No Contact Analysis - Last 7 Days</h4>
+                                </div>
+                                <div style="padding: 20px;">
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                            <span>Wrong Number Recorded</span>
+                                            <strong>127 (38%)</strong>
+                                        </div>
+                                        <div style="height: 8px; background: #e1e4e8; border-radius: 4px;">
+                                            <div style="width: 38%; height: 100%; background: #e74c3c; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                            <span>Customer Not Responding</span>
+                                            <strong>89 (27%)</strong>
+                                        </div>
+                                        <div style="height: 8px; background: #e1e4e8; border-radius: 4px;">
+                                            <div style="width: 27%; height: 100%; background: #f39c12; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                    <div style="margin-bottom: 15px;">
+                                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                            <span>Number Busy</span>
+                                            <strong>65 (20%)</strong>
+                                        </div>
+                                        <div style="height: 8px; background: #e1e4e8; border-radius: 4px;">
+                                            <div style="width: 20%; height: 100%; background: #3498db; border-radius: 4px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="data-table">
+                                <div class="table-header">
+                                    <h4>Escalation Queue</h4>
+                                </div>
+                                <div style="padding: 20px; max-height: 200px; overflow-y: auto;">
+                                    <div style="padding: 10px; background: #fff3cd; border-radius: 6px; margin-bottom: 10px;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">Case #C2024089 - High Value</div>
+                                        <div style="font-size: 14px; color: #666;">₹5.2L outstanding, no contact for 15 days</div>
+                                    </div>
+                                    <div style="padding: 10px; background: #fff3cd; border-radius: 6px; margin-bottom: 10px;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">Case #C2024156 - Legal Notice Required</div>
+                                        <div style="font-size: 14px; color: #666;">90 DPD reached, initiate legal process</div>
+                                    </div>
+                                    <div style="padding: 10px; background: #fff3cd; border-radius: 6px; margin-bottom: 10px;">
+                                        <div style="font-weight: 600; margin-bottom: 5px;">Case #C2024203 - Customer Complaint</div>
+                                        <div style="font-size: 14px; color: #666;">Harassment complaint received, review immediately</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 7. Executive Dashboard -->
+        <div class="mockup-section">
+            <h2>7. Senior Management/CXO Dashboard</h2>
+            <p>High-level portfolio analytics and strategic insights</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/executive/dashboard</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS - Executive View
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item active">Portfolio Overview</a>
+                            <a href="#" class="nav-item">Business Lines</a>
+                            <a href="#" class="nav-item">Risk Analysis</a>
+                            <a href="#" class="nav-item">Compliance</a>
+                            <a href="#" class="nav-item">Strategic Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">🔔</div>
+                            <div class="user-avatar">CXO</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px;">
+                        <h3 style="margin-bottom: 20px;">Portfolio Health Dashboard - November 2024</h3>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-bottom: 30px;">
+                            <div class="metric-card">
+                                <div class="metric-label">Total Portfolio</div>
+                                <div class="metric-value">₹450Cr</div>
+                                <span class="metric-change positive">+12% YoY</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">PAR 30+</div>
+                                <div class="metric-value">4.2%</div>
+                                <span class="metric-change negative">+0.3% MoM</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">PAR 90+ (NPA)</div>
+                                <div class="metric-value">2.1%</div>
+                                <span class="metric-change positive">-0.1% MoM</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Collection Efficiency</div>
+                                <div class="metric-value">94.5%</div>
+                                <span class="metric-change positive">+2% MoM</span>
+                            </div>
+                            <div class="metric-card">
+                                <div class="metric-label">Recovery Rate</div>
+                                <div class="metric-value">₹12.3Cr</div>
+                                <span class="metric-change positive">This Month</span>
+                            </div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+                            <div class="data-table">
+                                <div class="table-header">
+                                    <h4>Business Line Performance</h4>
+                                </div>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Business Line</th>
+                                            <th>Portfolio Size</th>
+                                            <th>PAR 30+</th>
+                                            <th>PAR 90+</th>
+                                            <th>Collection Rate</th>
+                                            <th>Trend</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>FPO Loans</td>
+                                            <td>₹180 Cr</td>
+                                            <td>3.8%</td>
+                                            <td>1.9%</td>
+                                            <td>95.2%</td>
+                                            <td><span class="status-badge status-active">↑ Improving</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>AVCF</td>
+                                            <td>₹120 Cr</td>
+                                            <td>4.5%</td>
+                                            <td>2.3%</td>
+                                            <td>93.8%</td>
+                                            <td><span class="status-badge status-pending">→ Stable</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Corporate Loans</td>
+                                            <td>₹100 Cr</td>
+                                            <td>3.2%</td>
+                                            <td>1.5%</td>
+                                            <td>96.5%</td>
+                                            <td><span class="status-badge status-active">↑ Improving</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Agri-Corporates</td>
+                                            <td>₹50 Cr</td>
+                                            <td>5.1%</td>
+                                            <td>2.8%</td>
+                                            <td>92.1%</td>
+                                            <td><span class="status-badge status-overdue">↓ Declining</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="data-table">
+                                <div class="table-header">
+                                    <h4>Key Risk Indicators</h4>
+                                </div>
+                                <div style="padding: 20px;">
+                                    <div style="margin-bottom: 20px;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Provision Coverage Ratio</div>
+                                        <div style="font-size: 24px; font-weight: bold;">78.5%</div>
+                                        <div style="font-size: 12px; color: #27ae60;">Above RBI Requirement</div>
+                                    </div>
+                                    <div style="margin-bottom: 20px;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Write-off Rate</div>
+                                        <div style="font-size: 24px; font-weight: bold;">0.8%</div>
+                                        <div style="font-size: 12px; color: #27ae60;">Within Limits</div>
+                                    </div>
+                                    <div style="margin-bottom: 20px;">
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Legal Cases</div>
+                                        <div style="font-size: 24px; font-weight: bold;">234</div>
+                                        <div style="font-size: 12px; color: #f39c12;">₹18.5 Cr Exposure</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Field Visit Success</div>
+                                        <div style="font-size: 24px; font-weight: bold;">42%</div>
+                                        <div style="font-size: 12px; color: #e74c3c;">Needs Improvement</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="data-table" style="margin-top: 20px;">
+                            <div class="table-header">
+                                <h4>Strategic Insights & Recommendations</h4>
+                            </div>
+                            <div style="padding: 20px;">
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+                                    <div style="padding: 15px; background: #e8f5e9; border-left: 4px solid #27ae60; border-radius: 4px;">
+                                        <div style="font-weight: 600; margin-bottom: 10px;">Positive Trend</div>
+                                        <div style="font-size: 14px;">Corporate loan segment showing consistent improvement. Consider increasing exposure.</div>
+                                    </div>
+                                    <div style="padding: 15px; background: #fff3cd; border-left: 4px solid #f39c12; border-radius: 4px;">
+                                        <div style="font-weight: 600; margin-bottom: 10px;">Attention Required</div>
+                                        <div style="font-size: 14px;">Agri-corporate segment deteriorating. Review underwriting criteria and enhance monitoring.</div>
+                                    </div>
+                                    <div style="padding: 15px; background: #e3f2fd; border-left: 4px solid #3498db; border-radius: 4px;">
+                                        <div style="font-weight: 600; margin-bottom: 10px;">Opportunity</div>
+                                        <div style="font-size: 14px;">AI-based calling showing 23% better contact rates. Scale implementation across regions.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 8. Reports Section -->
+        <div class="mockup-section">
+            <h2>8. Reports & Analytics Interface</h2>
+            <p>Comprehensive reporting module with customizable filters</p>
+            <div class="screen-container">
+                <div class="browser-bar">
+                    <div class="browser-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="url-bar">https://cms.nabkisan.com/reports</div>
+                </div>
+                <div class="screen-content">
+                    <div class="app-header">
+                        <div class="app-logo">
+                            <span>📊</span>
+                            NABKISAN CMS
+                        </div>
+                        <nav class="app-nav">
+                            <a href="#" class="nav-item">Dashboard</a>
+                            <a href="#" class="nav-item">Cases</a>
+                            <a href="#" class="nav-item">Field Visits</a>
+                            <a href="#" class="nav-item">Communications</a>
+                            <a href="#" class="nav-item active">Reports</a>
+                        </nav>
+                        <div class="user-menu">
+                            <div class="notification-bell">🔔</div>
+                            <div class="user-avatar">RM</div>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 20px;">
+                        <div style="display: grid; grid-template-columns: 250px 1fr; gap: 20px;">
+                            <div style="background: white; border-radius: 8px; padding: 20px;">
+                                <h4 style="margin-bottom: 20px;">Report Categories</h4>
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    <button class="btn btn-secondary" style="text-align: left;">📊 Collection Reports</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">👥 Agent Performance</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">💰 Recovery Analysis</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">📈 Portfolio Health</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">⚠️ Risk Reports</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">📋 Compliance Reports</button>
+                                    <button class="btn btn-secondary" style="text-align: left;">🏠 Field Visit Reports</button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                                    <h4 style="margin-bottom: 15px;">Generate Custom Report</h4>
+                                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px;">
+                                        <div class="form-group">
+                                            <label class="form-label">Date Range</label>
+                                            <select class="form-control">
+                                                <option>Last 7 Days</option>
+                                                <option>Last 30 Days</option>
+                                                <option>Last Quarter</option>
+                                                <option>Custom Range</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Business Line</label>
+                                            <select class="form-control">
+                                                <option>All</option>
+                                                <option>FPO</option>
+                                                <option>AVCF</option>
+                                                <option>Corporate</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">DPD Range</label>
+                                            <select class="form-control">
+                                                <option>All</option>
+                                                <option>0-30 DPD</option>
+                                                <option>31-60 DPD</option>
+                                                <option>61-90 DPD</option>
+                                                <option>90+ DPD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-primary">Generate Report</button>
+                                </div>
+                                
+                                <div class="data-table">
+                                    <div class="table-header">
+                                        <h4>Recent Reports</h4>
+                                    </div>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Report Name</th>
+                                                <th>Type</th>
+                                                <th>Generated By</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Daily Collection Report - 17 Nov</td>
+                                                <td>Automated</td>
+                                                <td>System</td>
+                                                <td>17-Nov-2024 06:00</td>
+                                                <td><span class="status-badge status-active">Ready</span></td>
+                                                <td>
+                                                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Monthly Portfolio Analysis</td>
+                                                <td>Scheduled</td>
+                                                <td>System</td>
+                                                <td>01-Nov-2024 00:00</td>
+                                                <td><span class="status-badge status-active">Ready</span></td>
+                                                <td>
+                                                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">View</button>
+                                                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;">Download</button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>RBI Compliance Report - Q3</td>
+                                                <td>Manual</td>
+                                                <td>Compliance Team</td>
+                                                <td>15-Nov-2024 14:30</td>
+                                                <td><span class="status-badge status-pending">Processing</span></td>
+                                                <td>
+                                                    <button class="btn btn-secondary" style="padding: 5px 10px; font-size: 12px;" disabled>View</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactivity
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
