@@ -17,6 +17,7 @@ builder.Services.AddHttpClient("CollectionAPI", client =>
 
 // Add scoped services
 builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>().CreateClient("CollectionAPI"));
+builder.Services.AddScoped<IApiService, ApiService>();
 
 var app = builder.Build();
 
