@@ -10,9 +10,9 @@ namespace CollectionManagementAPI.DTOs
     public class ApiResponse<T>
     {
         public bool Success { get; set; }
-        public string Message { get; set; }
-        public T Data { get; set; }
-        public List<string> Errors { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
+        public List<string>? Errors { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
         public static ApiResponse<T> SuccessResponse(T data, string message = "Success")
@@ -44,7 +44,7 @@ namespace CollectionManagementAPI.DTOs
     /// <typeparam name="T">Type of items in the list</typeparam>
     public class PagedResponse<T>
     {
-        public List<T> Items { get; set; }
+        public List<T> Items { get; set; } = new List<T>();
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
@@ -84,19 +84,19 @@ namespace CollectionManagementAPI.DTOs
     /// </summary>
     public class DashboardMetricsDTO
     {
-        public CaseMetrics CaseMetrics { get; set; }
-        public CollectionMetrics CollectionMetrics { get; set; }
-        public PTPMetrics PTPMetrics { get; set; }
-        public ActivityMetrics ActivityMetrics { get; set; }
+        public CaseMetrics? CaseMetrics { get; set; }
+        public CollectionMetrics? CollectionMetrics { get; set; }
+        public PTPMetrics? PTPMetrics { get; set; }
+        public ActivityMetrics? ActivityMetrics { get; set; }
     }
 
     public class CaseMetrics
     {
         public int TotalCases { get; set; }
         public int ActiveCases { get; set; }
-        public int CasesResolved Today { get; set; }
-        public Dictionary<string, int> CasesByBucket { get; set; }
-        public Dictionary<string, int> CasesByStatus { get; set; }
+        public int CasesResolvedToday { get; set; }
+        public Dictionary<string, int> CasesByBucket { get; set; } = new Dictionary<string, int>();
+        public Dictionary<string, int> CasesByStatus { get; set; } = new Dictionary<string, int>();
     }
 
     public class CollectionMetrics
@@ -131,8 +131,8 @@ namespace CollectionManagementAPI.DTOs
     /// </summary>
     public class LoginRequest
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -141,11 +141,11 @@ namespace CollectionManagementAPI.DTOs
     public class LoginResponse
     {
         public long UserID { get; set; }
-        public string Username { get; set; }
-        public string FullName { get; set; }
-        public string Email { get; set; }
-        public string Role { get; set; }
-        public string Token { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string FullName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
         public DateTime TokenExpiry { get; set; }
     }
 }
