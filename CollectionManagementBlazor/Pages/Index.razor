@@ -1,53 +1,166 @@
 @page "/"
+@inject NavigationManager NavigationManager
 
-<PageTitle>Home - Collection Management</PageTitle>
+<PageTitle>Home - NABKISAN Collection Management</PageTitle>
 
-<h1>Collection Management System</h1>
+<div class="page-container">
+    <div class="page-header">
+        <h1>🏦 NABKISAN Collection Management System</h1>
+        <p>Comprehensive collection and recovery management platform</p>
+    </div>
 
-<div class="alert alert-info" role="alert">
-    <h4 class="alert-heading">Welcome to NABKISAN Collection Management System!</h4>
-    <p>
-        This system helps you manage borrowers, loans, payments, and collection activities efficiently.
-    </p>
-    <hr>
-    <p class="mb-0">Use the navigation menu to access different modules.</p>
+    <div class="alert-modern info mb-4">
+        <h4>👋 Welcome to Collection Management System!</h4>
+        <p class="mb-2">
+            This system helps you manage borrowers, loans, payments, and collection activities efficiently.
+        </p>
+        <p class="mb-0">
+            <strong>Quick Start:</strong> Use the navigation menu or cards below to access different modules.
+        </p>
+    </div>
+
+    <!-- Dashboard Overview -->
+    <div class="dashboard-grid mb-4">
+        <div class="metric-card success">
+            <div class="metric-label">Total Borrowers</div>
+            <div class="metric-value">5</div>
+            <span class="metric-change positive">All Active</span>
+        </div>
+        <div class="metric-card info">
+            <div class="metric-label">Active Loans</div>
+            <div class="metric-value">5</div>
+            <span class="metric-change neutral">₹4.15L Portfolio</span>
+        </div>
+        <div class="metric-card warning">
+            <div class="metric-label">Collection Cases</div>
+            <div class="metric-value">5</div>
+            <span class="metric-change negative">Needs attention</span>
+        </div>
+        <div class="metric-card critical">
+            <div class="metric-label">Amount at Risk</div>
+            <div class="metric-value">₹19.5K</div>
+            <span class="metric-change negative">Outstanding</span>
+        </div>
+    </div>
+
+    <!-- Quick Access Cards -->
+    <h3 class="mb-3" style="color: #333; font-weight: 600;">Quick Access</h3>
+    <div class="row">
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="modern-card" style="cursor: pointer; height: 100%;" @onclick='() => Navigate("/borrowers")'>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">👥</div>
+                    <h5 style="font-weight: 600; margin-bottom: 10px;">Borrowers</h5>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Manage borrower information and profiles</p>
+                    <button class="btn btn-modern btn-primary" style="width: 100%;">
+                        View Borrowers →
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="modern-card" style="cursor: pointer; height: 100%;" @onclick='() => Navigate("/loans")'>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">💰</div>
+                    <h5 style="font-weight: 600; margin-bottom: 10px;">Loans</h5>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Track and manage loan accounts</p>
+                    <button class="btn btn-modern btn-primary" style="width: 100%;">
+                        View Loans →
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="modern-card" style="cursor: pointer; height: 100%;" @onclick='() => Navigate("/payments")'>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">💳</div>
+                    <h5 style="font-weight: 600; margin-bottom: 10px;">Payments</h5>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Record and track payment transactions</p>
+                    <button class="btn btn-modern btn-primary" style="width: 100%;">
+                        View Payments →
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-3 mb-4">
+            <div class="modern-card" style="cursor: pointer; height: 100%;" @onclick='() => Navigate("/collections")'>
+                <div style="text-align: center;">
+                    <div style="font-size: 48px; margin-bottom: 15px;">⚠️</div>
+                    <h5 style="font-weight: 600; margin-bottom: 10px;">Collections</h5>
+                    <p style="color: #666; font-size: 14px; margin-bottom: 20px;">Manage collection activities and tasks</p>
+                    <button class="btn btn-modern btn-primary" style="width: 100%;">
+                        View Collections →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Features -->
+    <div class="modern-card mt-4">
+        <h4 class="mb-3" style="font-weight: 600; color: #333;">System Features</h4>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">📊</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">Real-time Dashboard</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">Monitor all key metrics and KPIs in real-time</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">📱</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">Omnichannel Communication</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">SMS, Email, WhatsApp, and Voice integration</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">🤖</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">AI-Powered Analytics</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">Smart prioritization and predictive insights</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">🔒</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">Secure & Compliant</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">Bank-grade security and RBI compliance</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">📍</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">Field Visit Management</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">GPS tracking and route optimization</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div style="display: flex; gap: 15px; align-items: start;">
+                    <div style="font-size: 32px;">📈</div>
+                    <div>
+                        <h6 style="font-weight: 600; margin-bottom: 5px;">Advanced Reporting</h6>
+                        <p style="color: #666; font-size: 14px; margin: 0;">Comprehensive reports and analytics</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Borrowers</h5>
-                <p class="card-text">Manage borrower information and profiles</p>
-                <a href="/borrowers" class="btn btn-primary">View Borrowers</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Loans</h5>
-                <p class="card-text">Track and manage loan accounts</p>
-                <a href="/loans" class="btn btn-primary">View Loans</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Payments</h5>
-                <p class="card-text">Record and track payment transactions</p>
-                <a href="/payments" class="btn btn-primary">View Payments</a>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h5 class="card-title">Collections</h5>
-                <p class="card-text">Manage collection activities and tasks</p>
-                <a href="/collections" class="btn btn-primary">View Collections</a>
-            </div>
-        </div>
-    </div>
-</div>
+@code {
+    private void Navigate(string path)
+    {
+        NavigationManager.NavigateTo(path);
+    }
+}

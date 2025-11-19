@@ -1,0 +1,329 @@
+@page "/loans/{id:int}"
+@using CollectionManagementBlazor.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>Loan Details</PageTitle>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Loan Account Details</h1>
+        <p>Comprehensive loan information and payment history</p>
+    </div>
+
+    @if (loan == null)
+    {
+        <div class="text-center p-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading loan information...</p>
+        </div>
+    }
+    else
+    {
+        <div class="detail-container">
+            <!-- Sidebar with Loan Info -->
+            <div class="detail-sidebar">
+                <div class="detail-avatar">💰</div>
+                <div class="detail-info">
+                    <div class="detail-name">@loan.AccountNumber</div>
+                    <div class="detail-id">@loan.ProductType</div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Loan Details</div>
+                    <div class="info-row">
+                        <span class="info-label">Borrower:</span>
+                        <span class="info-value">@loan.BorrowerName</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Loan Amount:</span>
+                        <span class="info-value">@loan.LoanAmount.ToString("C")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Outstanding:</span>
+                        <span class="info-value" style="color: var(--danger-color); font-weight: 700;">@loan.Balance.ToString("C")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">EMI Amount:</span>
+                        <span class="info-value">@loan.EMIAmount.ToString("C")</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Payment Schedule</div>
+                    <div class="info-row">
+                        <span class="info-label">Tenure:</span>
+                        <span class="info-value">@loan.Tenure months</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Interest Rate:</span>
+                        <span class="info-value">@loan.InterestRate%</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Next Due Date:</span>
+                        <span class="info-value">@loan.DueDate.ToShortDateString()</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">
+                            <span class="modern-badge @GetStatusClass(loan.Status)">@loan.Status</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4">
+                    <button class="btn btn-modern btn-sm btn-primary" @onclick="EditLoan">Edit Loan</button>
+                    <button class="btn btn-modern btn-sm btn-success">Record Payment</button>
+                    <button class="btn btn-modern btn-sm btn-secondary" @onclick="GoBack">Back to List</button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div>
+                <!-- Quick Actions -->
+                <div class="action-bar">
+                    <button class="quick-action primary">
+                        💳 Generate Payment Link
+                    </button>
+                    <button class="quick-action">
+                        📄 View Statement
+                    </button>
+                    <button class="quick-action">
+                        📊 View Amortization
+                    </button>
+                    <button class="quick-action">
+                        📞 Contact Borrower
+                    </button>
+                    <button class="quick-action">
+                        📑 Download SOA
+                    </button>
+                </div>
+
+                <!-- Dashboard Metrics -->
+                <div class="dashboard-grid">
+                    <div class="metric-card success">
+                        <div class="metric-label">Total Paid</div>
+                        <div class="metric-value">₹@((loan.LoanAmount - loan.Balance).ToString("N0"))</div>
+                        <span class="metric-change positive">@(((loan.LoanAmount - loan.Balance) / loan.LoanAmount * 100).ToString("F1"))% Completed</span>
+                    </div>
+                    <div class="metric-card critical">
+                        <div class="metric-label">Outstanding Balance</div>
+                        <div class="metric-value">₹@(loan.Balance.ToString("N0"))</div>
+                        <span class="metric-change negative">Due: @loan.DueDate.ToShortDateString()</span>
+                    </div>
+                    <div class="metric-card info">
+                        <div class="metric-label">EMIs Paid</div>
+                        <div class="metric-value">@loan.EMIsPaid/@loan.Tenure</div>
+                        <span class="metric-change neutral">@loan.EMIsRemaining months remaining</span>
+                    </div>
+                </div>
+
+                <!-- Tabs Section -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <div class="tab @(activeTab == "payments" ? "active" : "")" @onclick='() => activeTab = "payments"'>
+                            Payment History
+                        </div>
+                        <div class="tab @(activeTab == "schedule" ? "active" : "")" @onclick='() => activeTab = "schedule"'>
+                            Payment Schedule
+                        </div>
+                        <div class="tab @(activeTab == "documents" ? "active" : "")" @onclick='() => activeTab = "documents"'>
+                            Documents
+                        </div>
+                        <div class="tab @(activeTab == "audit" ? "active" : "")" @onclick='() => activeTab = "audit"'>
+                            Audit Trail
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        @if (activeTab == "payments")
+                        {
+                            <h4 class="mb-3">Payment Transaction History</h4>
+                            <div class="table-responsive">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Transaction ID</th>
+                                            <th>Amount</th>
+                                            <th>Method</th>
+                                            <th>Status</th>
+                                            <th>Receipt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@DateTime.Now.AddDays(-5).ToShortDateString()</td>
+                                            <td>TXN-2024-001</td>
+                                            <td>₹@loan.EMIAmount.ToString("N0")</td>
+                                            <td>Bank Transfer</td>
+                                            <td><span class="modern-badge success">Completed</span></td>
+                                            <td><button class="btn btn-modern btn-sm btn-secondary">View</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>@DateTime.Now.AddDays(-35).ToShortDateString()</td>
+                                            <td>TXN-2024-002</td>
+                                            <td>₹@loan.EMIAmount.ToString("N0")</td>
+                                            <td>UPI</td>
+                                            <td><span class="modern-badge success">Completed</span></td>
+                                            <td><button class="btn btn-modern btn-sm btn-secondary">View</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else if (activeTab == "schedule")
+                        {
+                            <h4 class="mb-3">EMI Payment Schedule</h4>
+                            <div class="table-responsive">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>EMI #</th>
+                                            <th>Due Date</th>
+                                            <th>Principal</th>
+                                            <th>Interest</th>
+                                            <th>Total EMI</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 1; i <= 3; i++)
+                                        {
+                                            <tr>
+                                                <td>@i</td>
+                                                <td>@DateTime.Now.AddMonths(i - loan.EMIsPaid).ToShortDateString()</td>
+                                                <td>₹@((loan.EMIAmount * 0.7m).ToString("N0"))</td>
+                                                <td>₹@((loan.EMIAmount * 0.3m).ToString("N0"))</td>
+                                                <td>₹@loan.EMIAmount.ToString("N0")</td>
+                                                <td><span class="modern-badge @(i <= loan.EMIsPaid ? "success" : "pending")">@(i <= loan.EMIsPaid ? "Paid" : "Upcoming")</span></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else if (activeTab == "documents")
+                        {
+                            <h4 class="mb-3">Loan Documents</h4>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card">
+                                        <h6>📄 Loan Agreement</h6>
+                                        <p class="text-muted small">Signed: @loan.DisbursementDate.ToShortDateString()</p>
+                                        <button class="btn btn-modern btn-sm btn-primary mt-2">Download</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card">
+                                        <h6>📄 Sanction Letter</h6>
+                                        <p class="text-muted small">Issued: @loan.DisbursementDate.AddDays(-10).ToShortDateString()</p>
+                                        <button class="btn btn-modern btn-sm btn-primary mt-2">Download</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="modern-card">
+                                        <h6>📄 Disbursement Letter</h6>
+                                        <p class="text-muted small">Date: @loan.DisbursementDate.ToShortDateString()</p>
+                                        <button class="btn btn-modern btn-sm btn-primary mt-2">Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (activeTab == "audit")
+                        {
+                            <h4 class="mb-3">Activity Log</h4>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">@DateTime.Now.AddDays(-5).ToString("MMM dd, yyyy - hh:mm tt")</div>
+                                        <div class="timeline-title">Payment Received</div>
+                                        <div class="timeline-description">EMI payment of ₹@loan.EMIAmount.ToString("N0") received via Bank Transfer</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">@loan.DisbursementDate.ToString("MMM dd, yyyy - hh:mm tt")</div>
+                                        <div class="timeline-title">Loan Disbursed</div>
+                                        <div class="timeline-description">Loan amount of ₹@loan.LoanAmount.ToString("N0") disbursed to borrower account</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Loan? loan;
+    private string activeTab = "payments";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500); // Simulate loading
+
+        loan = new Loan
+        {
+            Id = Id,
+            AccountNumber = $"LN-{Id:D3}",
+            BorrowerName = "John Doe",
+            ProductType = "FPO Loan",
+            LoanAmount = 50000,
+            Balance = 45000,
+            EMIAmount = 1500,
+            Tenure = 36,
+            InterestRate = 12.5m,
+            Status = "Current",
+            DueDate = DateTime.Now.AddDays(15),
+            DisbursementDate = DateTime.Now.AddMonths(-2),
+            EMIsPaid = 2,
+            EMIsRemaining = 34
+        };
+    }
+
+    private string GetStatusClass(string status)
+    {
+        return status switch
+        {
+            "Current" => "success",
+            "Delinquent" => "danger",
+            "PaidOff" => "info",
+            _ => "pending"
+        };
+    }
+
+    private void EditLoan()
+    {
+        // TODO: Navigate to edit page
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/loans");
+    }
+
+    private class Loan
+    {
+        public int Id { get; set; }
+        public string AccountNumber { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public string ProductType { get; set; } = string.Empty;
+        public decimal LoanAmount { get; set; }
+        public decimal Balance { get; set; }
+        public decimal EMIAmount { get; set; }
+        public int Tenure { get; set; }
+        public decimal InterestRate { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public DateTime DueDate { get; set; }
+        public DateTime DisbursementDate { get; set; }
+        public int EMIsPaid { get; set; }
+        public int EMIsRemaining { get; set; }
+    }
+}

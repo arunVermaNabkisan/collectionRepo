@@ -1,0 +1,374 @@
+@page "/collections/{id:int}"
+@using CollectionManagementBlazor.Models
+@inject NavigationManager NavigationManager
+
+<PageTitle>Collection Case Details</PageTitle>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Collection Case Details</h1>
+        <p>Complete case information and collection activities</p>
+    </div>
+
+    @if (collectionCase == null)
+    {
+        <div class="text-center p-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading case information...</p>
+        </div>
+    }
+    else
+    {
+        <div class="detail-container">
+            <!-- Sidebar with Case Info -->
+            <div class="detail-sidebar">
+                <div class="detail-avatar">⚠️</div>
+                <div class="detail-info">
+                    <div class="detail-name">@collectionCase.CaseId</div>
+                    <div class="detail-id">@collectionCase.BorrowerName</div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Case Details</div>
+                    <div class="info-row">
+                        <span class="info-label">Account:</span>
+                        <span class="info-value">@collectionCase.AccountNumber</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Days Overdue:</span>
+                        <span class="info-value" style="color: var(--danger-color); font-weight: 700;">@collectionCase.DaysOverdue days</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Amount Due:</span>
+                        <span class="info-value" style="color: var(--danger-color); font-weight: 700;">@collectionCase.AmountDue.ToString("C")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Total Outstanding:</span>
+                        <span class="info-value">@collectionCase.TotalOutstanding.ToString("C")</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Case Status</div>
+                    <div class="info-row">
+                        <span class="info-label">Priority:</span>
+                        <span class="info-value">
+                            <span class="modern-badge @GetPriorityClass(collectionCase.Priority)">@collectionCase.Priority</span>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">
+                            <span class="modern-badge @GetStatusClass(collectionCase.Status)">@collectionCase.Status</span>
+                        </span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Assigned To:</span>
+                        <span class="info-value">@collectionCase.AssignedTo</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Contact:</span>
+                        <span class="info-value">@collectionCase.LastContactDate.ToString("dd MMM yyyy")</span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="info-title">Contact Information</div>
+                    <div class="info-row">
+                        <span class="info-label">Mobile:</span>
+                        <span class="info-value">@collectionCase.Phone</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Email:</span>
+                        <span class="info-value">@collectionCase.Email</span>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-column gap-2 mt-4">
+                    <button class="btn btn-modern btn-sm btn-success">Record PTP</button>
+                    <button class="btn btn-modern btn-sm btn-warning">Escalate Case</button>
+                    <button class="btn btn-modern btn-sm btn-secondary" @onclick="GoBack">Back to List</button>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div>
+                <!-- Quick Actions -->
+                <div class="action-bar">
+                    <button class="quick-action primary">
+                        📞 Call Customer
+                    </button>
+                    <button class="quick-action">
+                        💬 Send SMS
+                    </button>
+                    <button class="quick-action">
+                        📧 Send Email
+                    </button>
+                    <button class="quick-action">
+                        🔗 Payment Link
+                    </button>
+                    <button class="quick-action">
+                        📄 Real-time SOA
+                    </button>
+                    <button class="quick-action">
+                        🏠 Schedule Visit
+                    </button>
+                </div>
+
+                <!-- Dashboard Metrics -->
+                <div class="dashboard-grid">
+                    <div class="metric-card critical">
+                        <div class="metric-label">Days Past Due</div>
+                        <div class="metric-value">@collectionCase.DaysOverdue</div>
+                        <span class="metric-change negative">Bucket @collectionCase.Bucket</span>
+                    </div>
+                    <div class="metric-card warning">
+                        <div class="metric-label">Contact Attempts</div>
+                        <div class="metric-value">@collectionCase.ContactAttempts</div>
+                        <span class="metric-change neutral">Last: @collectionCase.LastContactDate.ToString("dd MMM")</span>
+                    </div>
+                    <div class="metric-card info">
+                        <div class="metric-label">Promises Made</div>
+                        <div class="metric-value">@collectionCase.PTPs</div>
+                        <span class="metric-change @(collectionCase.BrokenPTPs > 0 ? "negative" : "positive")">@collectionCase.BrokenPTPs broken</span>
+                    </div>
+                    <div class="metric-card success">
+                        <div class="metric-label">Partial Payments</div>
+                        <div class="metric-value">₹@collectionCase.PartialPayments.ToString("N0")</div>
+                        <span class="metric-change positive">Since case open</span>
+                    </div>
+                </div>
+
+                <!-- Tabs Section -->
+                <div class="tabs-container">
+                    <div class="tabs">
+                        <div class="tab @(activeTab == "interactions" ? "active" : "")" @onclick='() => activeTab = "interactions"'>
+                            Interaction History
+                        </div>
+                        <div class="tab @(activeTab == "ptp" ? "active" : "")" @onclick='() => activeTab = "ptp"'>
+                            PTP History
+                        </div>
+                        <div class="tab @(activeTab == "payments" ? "active" : "")" @onclick='() => activeTab = "payments"'>
+                            Payment History
+                        </div>
+                        <div class="tab @(activeTab == "notes" ? "active" : "")" @onclick='() => activeTab = "notes"'>
+                            Notes
+                        </div>
+                    </div>
+
+                    <div class="tab-content">
+                        @if (activeTab == "interactions")
+                        {
+                            <h4 class="mb-3">Communication Timeline</h4>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">Today, 10:30 AM</div>
+                                        <div class="timeline-title">📞 Call Attempted - No Answer</div>
+                                        <div class="timeline-description">Customer did not answer. Phone rang but no pickup. Will retry in evening.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">Yesterday, 3:45 PM</div>
+                                        <div class="timeline-title">💬 SMS Sent - Payment Reminder</div>
+                                        <div class="timeline-description">Reminder for overdue payment of ₹@collectionCase.AmountDue.ToString("N0"). Message delivered successfully.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">3 days ago, 11:00 AM</div>
+                                        <div class="timeline-title">📞 Successful Call - PTP Recorded</div>
+                                        <div class="timeline-description">Spoke with customer. Promised to pay ₹10,000 by 25th Nov. Customer mentioned salary delay.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">5 days ago, 2:30 PM</div>
+                                        <div class="timeline-title">📧 Email Sent - Formal Notice</div>
+                                        <div class="timeline-description">Formal payment notice sent to registered email. Email opened by customer.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (activeTab == "ptp")
+                        {
+                            <h4 class="mb-3">Promise to Pay Records</h4>
+                            <div class="table-responsive">
+                                <table class="modern-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date Recorded</th>
+                                            <th>Promise Date</th>
+                                            <th>Amount</th>
+                                            <th>Confidence</th>
+                                            <th>Status</th>
+                                            <th>Notes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>@DateTime.Now.AddDays(-3).ToShortDateString()</td>
+                                            <td>@DateTime.Now.AddDays(7).ToShortDateString()</td>
+                                            <td>₹10,000</td>
+                                            <td><span class="modern-badge medium">Medium</span></td>
+                                            <td><span class="modern-badge pending">Active</span></td>
+                                            <td>Waiting for salary credit</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@DateTime.Now.AddDays(-15).ToShortDateString()</td>
+                                            <td>@DateTime.Now.AddDays(-10).ToShortDateString()</td>
+                                            <td>₹5,000</td>
+                                            <td><span class="modern-badge low">Low</span></td>
+                                            <td><span class="modern-badge danger">Broken</span></td>
+                                            <td>Customer did not pay on promised date</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else if (activeTab == "payments")
+                        {
+                            <h4 class="mb-3">Payment Activity</h4>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">@DateTime.Now.AddDays(-20).ToString("MMM dd, yyyy - hh:mm tt")</div>
+                                        <div class="timeline-title">💰 Partial Payment Received - ₹2,000</div>
+                                        <div class="timeline-description">Bank Transfer via Account ending in 4521. Applied to outstanding balance.</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker"></div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-time">@DateTime.Now.AddDays(-60).ToString("MMM dd, yyyy - hh:mm tt")</div>
+                                        <div class="timeline-title">💰 Last Full EMI Payment - ₹@((collectionCase.AmountDue / 2).ToString("N0"))</div>
+                                        <div class="timeline-description">Payment received on time via UPI. Transaction ID: UPI2023456789</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else if (activeTab == "notes")
+                        {
+                            <h4 class="mb-3">Collection Notes</h4>
+                            <div class="modern-card mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong>@collectionCase.AssignedTo</strong>
+                                        <span class="text-muted small ms-2">@DateTime.Now.AddDays(-1).ToString("MMM dd, yyyy hh:mm tt")</span>
+                                    </div>
+                                    <span class="modern-badge info">Note</span>
+                                </div>
+                                <p class="mb-0">Customer mentioned recent business losses. Requested payment extension. Showing willingness to pay but facing genuine financial difficulties.</p>
+                            </div>
+                            <div class="modern-card mb-3">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong>Supervisor - Team Lead</strong>
+                                        <span class="text-muted small ms-2">@DateTime.Now.AddDays(-5).ToString("MMM dd, yyyy hh:mm tt")</span>
+                                    </div>
+                                    <span class="modern-badge warning">Action</span>
+                                </div>
+                                <p class="mb-0">Escalated to supervisor. Recommended for field visit if payment not received by month end.</p>
+                            </div>
+                            <div class="mt-3">
+                                <button class="btn btn-modern btn-primary">Add New Note</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private CollectionCase? collectionCase;
+    private string activeTab = "interactions";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(500); // Simulate loading
+
+        collectionCase = new CollectionCase
+        {
+            Id = Id,
+            CaseId = $"CC-{Id:D3}",
+            BorrowerName = "Robert Johnson",
+            AccountNumber = $"LN-{Id:D3}",
+            DaysOverdue = 45,
+            AmountDue = 5000,
+            TotalOutstanding = 15000,
+            Priority = "Critical",
+            Status = "Open",
+            AssignedTo = "Agent Smith",
+            LastContactDate = DateTime.Now.AddDays(-2),
+            Phone = "+91 98765 43210",
+            Email = "robert.j@example.com",
+            Bucket = "Bucket 2",
+            ContactAttempts = 8,
+            PTPs = 2,
+            BrokenPTPs = 1,
+            PartialPayments = 2000
+        };
+    }
+
+    private string GetPriorityClass(string priority)
+    {
+        return priority.ToLower() switch
+        {
+            "critical" => "critical",
+            "high" => "high",
+            "medium" => "medium",
+            "low" => "low",
+            _ => "info"
+        };
+    }
+
+    private string GetStatusClass(string status)
+    {
+        return status.ToLower() switch
+        {
+            "open" => "info",
+            "in progress" => "pending",
+            "resolved" => "success",
+            "closed" => "success",
+            _ => "info"
+        };
+    }
+
+    private void GoBack()
+    {
+        NavigationManager.NavigateTo("/collections");
+    }
+
+    private class CollectionCase
+    {
+        public int Id { get; set; }
+        public string CaseId { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public string AccountNumber { get; set; } = string.Empty;
+        public int DaysOverdue { get; set; }
+        public decimal AmountDue { get; set; }
+        public decimal TotalOutstanding { get; set; }
+        public string Priority { get; set; } = string.Empty;
+        public string Status { get; set; } = string.Empty;
+        public string AssignedTo { get; set; } = string.Empty;
+        public DateTime LastContactDate { get; set; }
+        public string Phone { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Bucket { get; set; } = string.Empty;
+        public int ContactAttempts { get; set; }
+        public int PTPs { get; set; }
+        public int BrokenPTPs { get; set; }
+        public decimal PartialPayments { get; set; }
+    }
+}

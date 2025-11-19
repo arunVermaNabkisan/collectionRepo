@@ -1,113 +1,154 @@
 @page "/collections"
 @using CollectionManagementBlazor.Models
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <PageTitle>Collections</PageTitle>
 
-<h1>Collections</h1>
-
-<p>Manage collection cases and activities.</p>
-
-@if (collectionCases == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (!collectionCases.Any())
-{
-    <div class="alert alert-info">
-        <p>No collection cases found in the system.</p>
-    </div>
-}
-else
-{
-    <div class="mb-3">
-        <button class="btn btn-primary">Create New Case</button>
+<div class="page-container">
+    <div class="page-header">
+        <h1>Collection Management</h1>
+        <p>Manage collection cases and recovery activities</p>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-md-3">
-            <div class="card text-white bg-danger">
-                <div class="card-body">
-                    <h5 class="card-title">Critical</h5>
-                    <p class="card-text fs-3">@GetCaseCountByPriority("Critical")</p>
-                </div>
+    @if (collectionCases == null)
+    {
+        <div class="text-center p-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading collection cases...</p>
+        </div>
+    }
+    else if (!collectionCases.Any())
+    {
+        <div class="alert-modern info">
+            <h5>No Collection Cases Found</h5>
+            <p>No active collection cases in the system.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Dashboard Metrics -->
+        <div class="dashboard-grid">
+            <div class="metric-card critical">
+                <div class="metric-label">Critical Priority</div>
+                <div class="metric-value">@GetCaseCountByPriority("Critical")</div>
+                <span class="metric-change negative">Immediate action required</span>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">High Priority</div>
+                <div class="metric-value">@GetCaseCountByPriority("High")</div>
+                <span class="metric-change neutral">Monitor closely</span>
+            </div>
+            <div class="metric-card info">
+                <div class="metric-label">Medium Priority</div>
+                <div class="metric-value">@GetCaseCountByPriority("Medium")</div>
+                <span class="metric-change neutral">Regular follow-up</span>
+            </div>
+            <div class="metric-card success">
+                <div class="metric-label">Low Priority</div>
+                <div class="metric-value">@GetCaseCountByPriority("Low")</div>
+                <span class="metric-change positive">Under control</span>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-warning">
-                <div class="card-body">
-                    <h5 class="card-title">High</h5>
-                    <p class="card-text fs-3">@GetCaseCountByPriority("High")</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">Medium</h5>
-                    <p class="card-text fs-3">@GetCaseCountByPriority("Medium")</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-secondary">
-                <div class="card-body">
-                    <h5 class="card-title">Low</h5>
-                    <p class="card-text fs-3">@GetCaseCountByPriority("Low")</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Case ID</th>
-                    <th>Borrower</th>
-                    <th>Account</th>
-                    <th>Days Overdue</th>
-                    <th>Amount Due</th>
-                    <th>Priority</th>
-                    <th>Status</th>
-                    <th>Assigned To</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var collectionCase in collectionCases)
-                {
-                    <tr>
-                        <td>@collectionCase.CaseId</td>
-                        <td>@collectionCase.BorrowerName</td>
-                        <td>@collectionCase.AccountNumber</td>
-                        <td>@collectionCase.DaysOverdue</td>
-                        <td>@collectionCase.AmountDue.ToString("C")</td>
-                        <td>
-                            <span class="badge @GetPriorityBadgeClass(collectionCase.Priority)">@collectionCase.Priority</span>
-                        </td>
-                        <td>
-                            <span class="badge @GetStatusBadgeClass(collectionCase.Status)">@collectionCase.Status</span>
-                        </td>
-                        <td>@collectionCase.AssignedTo</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">View</button>
-                            <button class="btn btn-sm btn-success">Contact</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
+        <!-- Summary Cards -->
+        <div class="dashboard-grid mb-4">
+            <div class="metric-card success">
+                <div class="metric-label">Total Cases</div>
+                <div class="metric-value">@collectionCases.Count</div>
+                <span class="metric-change positive">Active cases</span>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">Total Amount Due</div>
+                <div class="metric-value">₹@collectionCases.Sum(c => c.AmountDue).ToString("N0")</div>
+                <span class="metric-change negative">Outstanding</span>
+            </div>
+            <div class="metric-card info">
+                <div class="metric-label">Average DPD</div>
+                <div class="metric-value">@((int)collectionCases.Average(c => c.DaysOverdue))</div>
+                <span class="metric-change neutral">Days past due</span>
+            </div>
+        </div>
+
+        <!-- Collections Table -->
+        <div class="data-table-container">
+            <div class="table-header">
+                <h3>Active Collection Cases</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-box" placeholder="Search cases..." @bind="searchTerm" @bind:event="oninput" />
+                    <select class="search-box" style="width: 150px;" @bind="priorityFilter">
+                        <option value="">All Priorities</option>
+                        <option value="Critical">Critical</option>
+                        <option value="High">High</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <button class="btn btn-modern btn-primary">
+                        <span class="oi oi-plus"></span> Create Case
+                    </button>
+                    <button class="btn btn-modern btn-secondary">
+                        <span class="oi oi-data-transfer-download"></span> Export
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Case ID</th>
+                            <th>Borrower</th>
+                            <th>Account</th>
+                            <th>Days Overdue</th>
+                            <th>Amount Due</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Assigned To</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var collectionCase in GetFilteredCases())
+                        {
+                            <tr>
+                                <td><strong>@collectionCase.CaseId</strong></td>
+                                <td>@collectionCase.BorrowerName</td>
+                                <td>@collectionCase.AccountNumber</td>
+                                <td><span class="modern-badge danger">@collectionCase.DaysOverdue days</span></td>
+                                <td><strong>@collectionCase.AmountDue.ToString("C")</strong></td>
+                                <td>
+                                    <span class="modern-badge @GetPriorityBadgeClass(collectionCase.Priority)">@collectionCase.Priority</span>
+                                </td>
+                                <td>
+                                    <span class="modern-badge @GetStatusBadgeClass(collectionCase.Status)">@collectionCase.Status</span>
+                                </td>
+                                <td>@collectionCase.AssignedTo</td>
+                                <td>
+                                    <button class="btn btn-modern btn-sm btn-primary" @onclick="() => ViewDetails(collectionCase.Id)">
+                                        <span class="oi oi-eye"></span> View
+                                    </button>
+                                    <button class="btn btn-modern btn-sm btn-success" @onclick="() => ContactCustomer(collectionCase.Id)">
+                                        <span class="oi oi-phone"></span> Contact
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private List<CollectionCase> collectionCases = new();
+    private string searchTerm = string.Empty;
+    private string priorityFilter = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         // TODO: Replace with actual API call when endpoint is available
-        // For now, using sample data
+        await Task.Delay(500); // Simulate loading
+
         collectionCases = new List<CollectionCase>
         {
             new CollectionCase
@@ -157,37 +198,80 @@ else
                 Priority = "Low",
                 Status = "Open",
                 AssignedTo = "Agent Wilson"
+            },
+            new CollectionCase
+            {
+                Id = 5,
+                CaseId = "CC-005",
+                BorrowerName = "Emily Davis",
+                AccountNumber = "LN-007",
+                DaysOverdue = 60,
+                AmountDue = 7500,
+                Priority = "Critical",
+                Status = "Open",
+                AssignedTo = "Agent Smith"
             }
         };
     }
 
+    private List<CollectionCase> GetFilteredCases()
+    {
+        var filtered = collectionCases.AsEnumerable();
+
+        if (!string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filtered = filtered.Where(c =>
+                c.CaseId.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                c.BorrowerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                c.AccountNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (!string.IsNullOrWhiteSpace(priorityFilter))
+        {
+            filtered = filtered.Where(c => c.Priority == priorityFilter);
+        }
+
+        return filtered.OrderByDescending(c => c.DaysOverdue).ToList();
+    }
+
     private string GetPriorityBadgeClass(string priority)
     {
-        return priority switch
+        return priority.ToLower() switch
         {
-            "Critical" => "bg-danger",
-            "High" => "bg-warning",
-            "Medium" => "bg-info",
-            "Low" => "bg-secondary",
-            _ => "bg-light"
+            "critical" => "critical",
+            "high" => "high",
+            "medium" => "medium",
+            "low" => "low",
+            _ => "info"
         };
     }
 
     private string GetStatusBadgeClass(string status)
     {
-        return status switch
+        return status.ToLower() switch
         {
-            "Open" => "bg-primary",
-            "In Progress" => "bg-warning",
-            "Resolved" => "bg-success",
-            "Closed" => "bg-secondary",
-            _ => "bg-light"
+            "open" => "info",
+            "in progress" => "pending",
+            "resolved" => "success",
+            "closed" => "success",
+            _ => "info"
         };
     }
 
     private int GetCaseCountByPriority(string priority)
     {
         return collectionCases.Count(c => c.Priority == priority);
+    }
+
+    private void ViewDetails(int id)
+    {
+        NavigationManager.NavigateTo($"/collections/{id}");
+    }
+
+    private void ContactCustomer(int id)
+    {
+        // TODO: Implement contact functionality
+        ViewDetails(id);
     }
 
     private class CollectionCase

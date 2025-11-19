@@ -1,72 +1,145 @@
 @page "/borrowers"
 @using CollectionManagementBlazor.Models
 @inject HttpClient Http
+@inject NavigationManager NavigationManager
 
 <PageTitle>Borrowers</PageTitle>
 
-<h1>Borrowers</h1>
-
-<p>Manage borrower information and profiles.</p>
-
-@if (borrowers == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (!borrowers.Any())
-{
-    <div class="alert alert-info">
-        <p>No borrowers found in the system.</p>
+<div class="page-container">
+    <div class="page-header">
+        <h1>Borrower Management</h1>
+        <p>Manage borrower information and profiles</p>
     </div>
-}
-else
-{
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var borrower in borrowers)
-                {
-                    <tr>
-                        <td>@borrower.Id</td>
-                        <td>@borrower.Name</td>
-                        <td>@borrower.Email</td>
-                        <td>@borrower.Phone</td>
-                        <td>
-                            <span class="badge bg-success">Active</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">View</button>
-                            <button class="btn btn-sm btn-warning">Edit</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
+
+    @if (borrowers == null)
+    {
+        <div class="text-center p-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading borrowers...</p>
+        </div>
+    }
+    else if (!borrowers.Any())
+    {
+        <div class="alert-modern info">
+            <h5>No Borrowers Found</h5>
+            <p>No borrowers are currently registered in the system.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Dashboard Metrics -->
+        <div class="dashboard-grid">
+            <div class="metric-card success">
+                <div class="metric-label">Total Borrowers</div>
+                <div class="metric-value">@borrowers.Count</div>
+                <span class="metric-change positive">All Active</span>
+            </div>
+            <div class="metric-card info">
+                <div class="metric-label">With Active Loans</div>
+                <div class="metric-value">@borrowers.Count</div>
+                <span class="metric-change neutral">100% of total</span>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">Pending Verifications</div>
+                <div class="metric-value">0</div>
+                <span class="metric-change positive">All verified</span>
+            </div>
+        </div>
+
+        <!-- Borrowers Table -->
+        <div class="data-table-container">
+            <div class="table-header">
+                <h3>All Borrowers</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-box" placeholder="Search borrowers..." @bind="searchTerm" @bind:event="oninput" />
+                    <button class="btn btn-modern btn-secondary">
+                        <span class="oi oi-magnifying-glass"></span> Filter
+                    </button>
+                    <button class="btn btn-modern btn-primary">
+                        <span class="oi oi-plus"></span> Add Borrower
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var borrower in GetFilteredBorrowers())
+                        {
+                            <tr>
+                                <td><strong>@borrower.Id</strong></td>
+                                <td>@borrower.Name</td>
+                                <td>@borrower.Email</td>
+                                <td>@borrower.Phone</td>
+                                <td>
+                                    <span class="modern-badge success">Active</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-modern btn-sm btn-primary" @onclick="() => ViewDetails(borrower.Id)">
+                                        <span class="oi oi-eye"></span> View
+                                    </button>
+                                    <button class="btn btn-modern btn-sm btn-warning" @onclick="() => EditBorrower(borrower.Id)">
+                                        <span class="oi oi-pencil"></span> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
     private List<Borrower> borrowers = new();
+    private string searchTerm = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         // TODO: Replace with actual API call when endpoint is available
-        // For now, using sample data
+        await Task.Delay(500); // Simulate loading
+
         borrowers = new List<Borrower>
         {
-            new Borrower { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Phone = "555-0100" },
-            new Borrower { Id = 2, Name = "Jane Smith", Email = "jane.smith@example.com", Phone = "555-0101" },
-            new Borrower { Id = 3, Name = "Robert Johnson", Email = "robert.j@example.com", Phone = "555-0102" }
+            new Borrower { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Phone = "+91 98765 43210" },
+            new Borrower { Id = 2, Name = "Jane Smith", Email = "jane.smith@example.com", Phone = "+91 98765 43211" },
+            new Borrower { Id = 3, Name = "Robert Johnson", Email = "robert.j@example.com", Phone = "+91 98765 43212" },
+            new Borrower { Id = 4, Name = "Mary Williams", Email = "mary.w@example.com", Phone = "+91 98765 43213" },
+            new Borrower { Id = 5, Name = "James Brown", Email = "james.b@example.com", Phone = "+91 98765 43214" }
         };
+    }
+
+    private List<Borrower> GetFilteredBorrowers()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return borrowers;
+
+        return borrowers.Where(b =>
+            b.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            b.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            b.Phone.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+
+    private void ViewDetails(int id)
+    {
+        NavigationManager.NavigateTo($"/borrowers/{id}");
+    }
+
+    private void EditBorrower(int id)
+    {
+        // TODO: Navigate to edit page
+        NavigationManager.NavigateTo($"/borrowers/{id}");
     }
 
     private class Borrower
