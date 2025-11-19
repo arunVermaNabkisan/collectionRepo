@@ -4,81 +4,204 @@
 
 <PageTitle>Payments</PageTitle>
 
-<h1>Payments</h1>
-
-<p>View and process payment transactions.</p>
-
-@if (payments == null)
-{
-    <p><em>Loading...</em></p>
-}
-else if (!payments.Any())
-{
-    <div class="alert alert-info">
-        <p>No payments found in the system.</p>
-    </div>
-}
-else
-{
-    <div class="mb-3">
-        <button class="btn btn-success">Record New Payment</button>
+<div class="page-container">
+    <div class="page-header">
+        <h1>Payment Transactions</h1>
+        <p>Manage and track all payment transactions</p>
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Transaction ID</th>
-                    <th>Date</th>
-                    <th>Borrower</th>
-                    <th>Account</th>
-                    <th>Amount</th>
-                    <th>Method</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var payment in payments)
-                {
-                    <tr>
-                        <td>@payment.TransactionId</td>
-                        <td>@payment.PaymentDate.ToShortDateString()</td>
-                        <td>@payment.BorrowerName</td>
-                        <td>@payment.AccountNumber</td>
-                        <td>@payment.Amount.ToString("C")</td>
-                        <td>@payment.PaymentMethod</td>
-                        <td>
-                            <span class="badge @GetStatusBadgeClass(payment.Status)">@payment.Status</span>
-                        </td>
-                        <td>
-                            <button class="btn btn-sm btn-primary">View Receipt</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+    @if (payments == null)
+    {
+        <div class="text-center p-4">
+            <div class="loading-spinner"></div>
+            <p class="mt-3">Loading payments...</p>
+        </div>
+    }
+    else if (!payments.Any())
+    {
+        <div class="alert-modern info">
+            <h5>No Payments Found</h5>
+            <p>No payment transactions are currently recorded in the system.</p>
+        </div>
+    }
+    else
+    {
+        <!-- Dashboard Metrics -->
+        <div class="dashboard-grid">
+            <div class="metric-card success">
+                <div class="metric-label">Total Payments Today</div>
+                <div class="metric-value">@GetTotalPaymentsToday().ToString("C")</div>
+                <span class="metric-change positive">@GetTodayPaymentCount() transactions</span>
+            </div>
+            <div class="metric-card info">
+                <div class="metric-label">Total Revenue</div>
+                <div class="metric-value">@GetTotalRevenue().ToString("C")</div>
+                <span class="metric-change neutral">All time</span>
+            </div>
+            <div class="metric-card warning">
+                <div class="metric-label">Pending Payments</div>
+                <div class="metric-value">@GetPendingCount()</div>
+                <span class="metric-change neutral">@GetPendingAmount().ToString("C")</span>
+            </div>
+            <div class="metric-card success">
+                <div class="metric-label">Completed Today</div>
+                <div class="metric-value">@GetCompletedTodayCount()</div>
+                <span class="metric-change positive">@GetCompletedTodayAmount().ToString("C")</span>
+            </div>
+        </div>
 
-    <div class="mt-3">
-        <p><strong>Total Payments Today:</strong> @GetTotalPaymentsToday().ToString("C")</p>
+        <!-- Payments Table -->
+        <div class="data-table-container">
+            <div class="table-header">
+                <h3>All Transactions</h3>
+                <div class="table-actions">
+                    <input type="text" class="search-box" placeholder="Search transactions..." @bind="searchTerm" @bind:event="oninput" />
+                    <button class="btn btn-modern btn-secondary">
+                        <span class="oi oi-magnifying-glass"></span> Filter
+                    </button>
+                    <button class="btn btn-modern btn-success">
+                        <span class="oi oi-plus"></span> Record New Payment
+                    </button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Date & Time</th>
+                            <th>Borrower</th>
+                            <th>Account</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var payment in GetFilteredPayments())
+                        {
+                            <tr>
+                                <td><strong>@payment.TransactionId</strong></td>
+                                <td>@payment.PaymentDate.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>@payment.BorrowerName</td>
+                                <td>@payment.AccountNumber</td>
+                                <td><strong>@payment.Amount.ToString("C")</strong></td>
+                                <td>@payment.PaymentMethod</td>
+                                <td>
+                                    <span class="modern-badge @GetStatusBadgeClass(payment.Status)">@payment.Status</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-modern btn-sm btn-primary" @onclick="() => ShowReceiptDetails(payment)">
+                                        <span class="oi oi-file"></span> View Receipt
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Receipt Details Modal -->
+@if (showReceiptModal && selectedPayment != null)
+{
+    <div class="modal-overlay" @onclick="CloseReceiptModal">
+        <div class="modal-dialog" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h3>Payment Receipt</h3>
+                <button class="modal-close" @onclick="CloseReceiptModal">
+                    <span class="oi oi-x"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="receipt-container">
+                    <div class="receipt-header">
+                        <div class="receipt-logo">NABKISAN</div>
+                        <div class="receipt-title">Payment Receipt</div>
+                        <div class="receipt-id">@selectedPayment.TransactionId</div>
+                    </div>
+
+                    <div class="receipt-section">
+                        <h4>Transaction Details</h4>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Transaction ID:</span>
+                            <span class="receipt-value">@selectedPayment.TransactionId</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Date & Time:</span>
+                            <span class="receipt-value">@selectedPayment.PaymentDate.ToString("MMMM dd, yyyy HH:mm:ss")</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Status:</span>
+                            <span class="modern-badge @GetStatusBadgeClass(selectedPayment.Status)">@selectedPayment.Status</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-section">
+                        <h4>Borrower Information</h4>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Name:</span>
+                            <span class="receipt-value">@selectedPayment.BorrowerName</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Account Number:</span>
+                            <span class="receipt-value">@selectedPayment.AccountNumber</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-section">
+                        <h4>Payment Information</h4>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Payment Method:</span>
+                            <span class="receipt-value">@selectedPayment.PaymentMethod</span>
+                        </div>
+                        <div class="receipt-row">
+                            <span class="receipt-label">Amount Paid:</span>
+                            <span class="receipt-value receipt-amount">@selectedPayment.Amount.ToString("C")</span>
+                        </div>
+                    </div>
+
+                    <div class="receipt-footer">
+                        <p>This is a computer-generated receipt and does not require a signature.</p>
+                        <p class="receipt-note">For any queries, please contact our support team.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-modern btn-secondary" @onclick="CloseReceiptModal">Close</button>
+                <button class="btn btn-modern btn-primary">
+                    <span class="oi oi-print"></span> Print Receipt
+                </button>
+                <button class="btn btn-modern btn-success">
+                    <span class="oi oi-data-transfer-download"></span> Download PDF
+                </button>
+            </div>
+        </div>
     </div>
 }
 
 @code {
     private List<Payment> payments = new();
+    private string searchTerm = string.Empty;
+    private bool showReceiptModal = false;
+    private Payment? selectedPayment = null;
 
     protected override async Task OnInitializedAsync()
     {
         // TODO: Replace with actual API call when endpoint is available
         // For now, using sample data
+        await Task.Delay(500); // Simulate loading
+
         payments = new List<Payment>
         {
             new Payment
             {
                 Id = 1,
                 TransactionId = "TXN-001",
-                PaymentDate = DateTime.Now,
+                PaymentDate = DateTime.Now.AddHours(-2),
                 BorrowerName = "John Doe",
                 AccountNumber = "LN-001",
                 Amount = 1500,
@@ -93,36 +216,131 @@ else
                 BorrowerName = "Jane Smith",
                 AccountNumber = "LN-002",
                 Amount = 2000,
-                PaymentMethod = "Check",
+                PaymentMethod = "UPI",
                 Status = "Completed"
             },
             new Payment
             {
                 Id = 3,
                 TransactionId = "TXN-003",
-                PaymentDate = DateTime.Now,
+                PaymentDate = DateTime.Now.AddHours(-5),
                 BorrowerName = "Robert Johnson",
                 AccountNumber = "LN-003",
                 Amount = 500,
                 PaymentMethod = "Cash",
                 Status = "Pending"
+            },
+            new Payment
+            {
+                Id = 4,
+                TransactionId = "TXN-004",
+                PaymentDate = DateTime.Now.AddDays(-2),
+                BorrowerName = "Mary Williams",
+                AccountNumber = "LN-004",
+                Amount = 3500,
+                PaymentMethod = "Check",
+                Status = "Completed"
+            },
+            new Payment
+            {
+                Id = 5,
+                TransactionId = "TXN-005",
+                PaymentDate = DateTime.Now.AddHours(-1),
+                BorrowerName = "James Brown",
+                AccountNumber = "LN-005",
+                Amount = 1200,
+                PaymentMethod = "Bank Transfer",
+                Status = "Completed"
+            },
+            new Payment
+            {
+                Id = 6,
+                TransactionId = "TXN-006",
+                PaymentDate = DateTime.Now.AddDays(-3),
+                BorrowerName = "Patricia Garcia",
+                AccountNumber = "LN-006",
+                Amount = 800,
+                PaymentMethod = "UPI",
+                Status = "Failed"
             }
         };
+    }
+
+    private List<Payment> GetFilteredPayments()
+    {
+        if (string.IsNullOrWhiteSpace(searchTerm))
+            return payments;
+
+        return payments.Where(p =>
+            p.TransactionId.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.BorrowerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.AccountNumber.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.PaymentMethod.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+            p.Status.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+    }
+
+    private void ShowReceiptDetails(Payment payment)
+    {
+        selectedPayment = payment;
+        showReceiptModal = true;
+    }
+
+    private void CloseReceiptModal()
+    {
+        showReceiptModal = false;
+        selectedPayment = null;
     }
 
     private string GetStatusBadgeClass(string status)
     {
         return status switch
         {
-            "Completed" => "bg-success",
-            "Pending" => "bg-warning",
-            "Failed" => "bg-danger",
-            "Refunded" => "bg-secondary",
-            _ => "bg-info"
+            "Completed" => "success",
+            "Pending" => "pending",
+            "Failed" => "danger",
+            "Refunded" => "info",
+            _ => "info"
         };
     }
 
     private decimal GetTotalPaymentsToday()
+    {
+        return payments
+            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed")
+            .Sum(p => p.Amount);
+    }
+
+    private int GetTodayPaymentCount()
+    {
+        return payments.Count(p => p.PaymentDate.Date == DateTime.Now.Date);
+    }
+
+    private decimal GetTotalRevenue()
+    {
+        return payments
+            .Where(p => p.Status == "Completed")
+            .Sum(p => p.Amount);
+    }
+
+    private int GetPendingCount()
+    {
+        return payments.Count(p => p.Status == "Pending");
+    }
+
+    private decimal GetPendingAmount()
+    {
+        return payments
+            .Where(p => p.Status == "Pending")
+            .Sum(p => p.Amount);
+    }
+
+    private int GetCompletedTodayCount()
+    {
+        return payments.Count(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed");
+    }
+
+    private decimal GetCompletedTodayAmount()
     {
         return payments
             .Where(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed")

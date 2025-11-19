@@ -55,7 +55,7 @@
                     <button class="btn btn-modern btn-secondary">
                         <span class="oi oi-magnifying-glass"></span> Filter
                     </button>
-                    <button class="btn btn-modern btn-primary">
+                    <button class="btn btn-modern btn-primary" @onclick="AddNewBorrower">
                         <span class="oi oi-plus"></span> Add Borrower
                     </button>
                 </div>
@@ -129,6 +129,11 @@
             b.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
             b.Phone.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
             .ToList();
+    }
+
+    private void AddNewBorrower()
+    {
+        NavigationManager.NavigateTo("/borrowers/add");
     }
 
     private void ViewDetails(int id)

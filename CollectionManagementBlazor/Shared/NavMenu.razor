@@ -1,38 +1,58 @@
-<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Collection Management</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
+<div class="modern-navbar">
+    <div class="navbar-brand-container">
+        <a class="navbar-brand-modern" href="">
+            <div class="brand-logo">
+                <span class="brand-icon">N</span>
+            </div>
+            <div class="brand-text">
+                <div class="brand-title">NABKISAN</div>
+                <div class="brand-subtitle">Collection Management</div>
+            </div>
+        </a>
+        <button title="Navigation menu" class="modern-navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="oi oi-menu"></span>
         </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
+<div class="@NavMenuCssClass modern-nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="modern-nav-menu">
+        <div class="nav-section">
+            <div class="nav-section-title">Main Menu</div>
+            <div class="modern-nav-item">
+                <NavLink class="modern-nav-link" href="" Match="NavLinkMatch.All">
+                    <span class="nav-icon oi oi-home" aria-hidden="true"></span>
+                    <span class="nav-text">Dashboard</span>
+                </NavLink>
+            </div>
+            <div class="modern-nav-item">
+                <NavLink class="modern-nav-link" href="borrowers">
+                    <span class="nav-icon oi oi-people" aria-hidden="true"></span>
+                    <span class="nav-text">Borrowers</span>
+                </NavLink>
+            </div>
+            <div class="modern-nav-item">
+                <NavLink class="modern-nav-link" href="loans">
+                    <span class="nav-icon oi oi-list-rich" aria-hidden="true"></span>
+                    <span class="nav-text">Loans</span>
+                </NavLink>
+            </div>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="borrowers">
-                <span class="oi oi-people" aria-hidden="true"></span> Borrowers
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="loans">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Loans
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="payments">
-                <span class="oi oi-dollar" aria-hidden="true"></span> Payments
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="collections">
-                <span class="oi oi-spreadsheet" aria-hidden="true"></span> Collections
-            </NavLink>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Finance</div>
+            <div class="modern-nav-item">
+                <NavLink class="modern-nav-link" href="payments">
+                    <span class="nav-icon oi oi-dollar" aria-hidden="true"></span>
+                    <span class="nav-text">Payments</span>
+                </NavLink>
+            </div>
+            <div class="modern-nav-item">
+                <NavLink class="modern-nav-link" href="collections">
+                    <span class="nav-icon oi oi-spreadsheet" aria-hidden="true"></span>
+                    <span class="nav-text">Collections</span>
+                </NavLink>
+            </div>
         </div>
     </nav>
 </div>
