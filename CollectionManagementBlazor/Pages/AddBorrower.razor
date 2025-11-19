@@ -1,0 +1,332 @@
+@page "/borrowers/add"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Add New Borrower</PageTitle>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Add New Borrower</h1>
+        <p>Create a new borrower profile in the system</p>
+    </div>
+
+    <div class="modern-card">
+        <div class="form-header">
+            <h3>Borrower Information</h3>
+            <p class="form-description">Fill in the details below to add a new borrower to the system.</p>
+        </div>
+
+        <EditForm Model="@borrowerModel" OnValidSubmit="@HandleSubmit" class="modern-form">
+            <DataAnnotationsValidator />
+
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-person"></span>
+                    Personal Information
+                </h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Full Name</label>
+                        <InputText @bind-Value="borrowerModel.FullName" class="form-control-modern" placeholder="Enter full name" />
+                        <ValidationMessage For="@(() => borrowerModel.FullName)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Date of Birth</label>
+                        <InputDate @bind-Value="borrowerModel.DateOfBirth" class="form-control-modern" />
+                        <ValidationMessage For="@(() => borrowerModel.DateOfBirth)" class="validation-message" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <InputSelect @bind-Value="borrowerModel.Gender" class="form-control-modern">
+                            <option value="">Select gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </InputSelect>
+                        <ValidationMessage For="@(() => borrowerModel.Gender)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Occupation</label>
+                        <InputText @bind-Value="borrowerModel.Occupation" class="form-control-modern" placeholder="Enter occupation" />
+                        <ValidationMessage For="@(() => borrowerModel.Occupation)" class="validation-message" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-phone"></span>
+                    Contact Information
+                </h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">Email Address</label>
+                        <InputText @bind-Value="borrowerModel.Email" class="form-control-modern" type="email" placeholder="example@email.com" />
+                        <ValidationMessage For="@(() => borrowerModel.Email)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Phone Number</label>
+                        <InputText @bind-Value="borrowerModel.PhoneNumber" class="form-control-modern" placeholder="+91 98765 43210" />
+                        <ValidationMessage For="@(() => borrowerModel.PhoneNumber)" class="validation-message" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Alternate Phone</label>
+                        <InputText @bind-Value="borrowerModel.AlternatePhone" class="form-control-modern" placeholder="+91 98765 43210" />
+                        <ValidationMessage For="@(() => borrowerModel.AlternatePhone)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">WhatsApp Number</label>
+                        <InputText @bind-Value="borrowerModel.WhatsAppNumber" class="form-control-modern" placeholder="+91 98765 43210" />
+                        <ValidationMessage For="@(() => borrowerModel.WhatsAppNumber)" class="validation-message" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-home"></span>
+                    Address Information
+                </h4>
+
+                <div class="form-group">
+                    <label class="form-label required">Street Address</label>
+                    <InputTextArea @bind-Value="borrowerModel.StreetAddress" class="form-control-modern" rows="2" placeholder="Enter street address" />
+                    <ValidationMessage For="@(() => borrowerModel.StreetAddress)" class="validation-message" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">City</label>
+                        <InputText @bind-Value="borrowerModel.City" class="form-control-modern" placeholder="Enter city" />
+                        <ValidationMessage For="@(() => borrowerModel.City)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">State</label>
+                        <InputText @bind-Value="borrowerModel.State" class="form-control-modern" placeholder="Enter state" />
+                        <ValidationMessage For="@(() => borrowerModel.State)" class="validation-message" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label required">PIN Code</label>
+                        <InputText @bind-Value="borrowerModel.PinCode" class="form-control-modern" placeholder="Enter PIN code" />
+                        <ValidationMessage For="@(() => borrowerModel.PinCode)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Country</label>
+                        <InputText @bind-Value="borrowerModel.Country" class="form-control-modern" placeholder="India" />
+                        <ValidationMessage For="@(() => borrowerModel.Country)" class="validation-message" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identity Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-document"></span>
+                    Identity Information
+                </h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Aadhaar Number</label>
+                        <InputText @bind-Value="borrowerModel.AadhaarNumber" class="form-control-modern" placeholder="1234 5678 9012" />
+                        <ValidationMessage For="@(() => borrowerModel.AadhaarNumber)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">PAN Number</label>
+                        <InputText @bind-Value="borrowerModel.PanNumber" class="form-control-modern" placeholder="ABCDE1234F" />
+                        <ValidationMessage For="@(() => borrowerModel.PanNumber)" class="validation-message" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Voter ID</label>
+                        <InputText @bind-Value="borrowerModel.VoterIdNumber" class="form-control-modern" placeholder="ABC1234567" />
+                        <ValidationMessage For="@(() => borrowerModel.VoterIdNumber)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Driving License</label>
+                        <InputText @bind-Value="borrowerModel.DrivingLicense" class="form-control-modern" placeholder="DL-1420110012345" />
+                        <ValidationMessage For="@(() => borrowerModel.DrivingLicense)" class="validation-message" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banking Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-credit-card"></span>
+                    Banking Information
+                </h4>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Bank Name</label>
+                        <InputText @bind-Value="borrowerModel.BankName" class="form-control-modern" placeholder="Enter bank name" />
+                        <ValidationMessage For="@(() => borrowerModel.BankName)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Account Number</label>
+                        <InputText @bind-Value="borrowerModel.AccountNumber" class="form-control-modern" placeholder="Enter account number" />
+                        <ValidationMessage For="@(() => borrowerModel.AccountNumber)" class="validation-message" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">IFSC Code</label>
+                        <InputText @bind-Value="borrowerModel.IfscCode" class="form-control-modern" placeholder="SBIN0001234" />
+                        <ValidationMessage For="@(() => borrowerModel.IfscCode)" class="validation-message" />
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Branch Name</label>
+                        <InputText @bind-Value="borrowerModel.BranchName" class="form-control-modern" placeholder="Enter branch name" />
+                        <ValidationMessage For="@(() => borrowerModel.BranchName)" class="validation-message" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Information Section -->
+            <div class="form-section">
+                <h4 class="section-title">
+                    <span class="section-icon oi oi-info"></span>
+                    Additional Information
+                </h4>
+
+                <div class="form-group">
+                    <label class="form-label">Notes</label>
+                    <InputTextArea @bind-Value="borrowerModel.Notes" class="form-control-modern" rows="4" placeholder="Add any additional notes or comments..." />
+                    <ValidationMessage For="@(() => borrowerModel.Notes)" class="validation-message" />
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-modern btn-secondary btn-lg" @onclick="Cancel">
+                    <span class="oi oi-x"></span> Cancel
+                </button>
+                <button type="submit" class="btn btn-modern btn-success btn-lg" disabled="@isSubmitting">
+                    @if (isSubmitting)
+                    {
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        <span>Saving...</span>
+                    }
+                    else
+                    {
+                        <span class="oi oi-check"></span>
+                        <span>Save Borrower</span>
+                    }
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private BorrowerModel borrowerModel = new();
+    private bool isSubmitting = false;
+
+    private async Task HandleSubmit()
+    {
+        isSubmitting = true;
+
+        try
+        {
+            // TODO: Replace with actual API call when endpoint is available
+            await Task.Delay(1500); // Simulate API call
+
+            // Navigate back to borrowers list
+            NavigationManager.NavigateTo("/borrowers");
+        }
+        catch (Exception ex)
+        {
+            // TODO: Show error message to user
+            Console.WriteLine($"Error saving borrower: {ex.Message}");
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/borrowers");
+    }
+
+    private class BorrowerModel
+    {
+        // Personal Information
+        [Required(ErrorMessage = "Full name is required")]
+        public string FullName { get; set; } = string.Empty;
+
+        public DateTime? DateOfBirth { get; set; }
+        public string Gender { get; set; } = string.Empty;
+        public string Occupation { get; set; } = string.Empty;
+
+        // Contact Information
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Phone number is required")]
+        public string PhoneNumber { get; set; } = string.Empty;
+
+        public string AlternatePhone { get; set; } = string.Empty;
+        public string WhatsAppNumber { get; set; } = string.Empty;
+
+        // Address Information
+        [Required(ErrorMessage = "Street address is required")]
+        public string StreetAddress { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "City is required")]
+        public string City { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "State is required")]
+        public string State { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "PIN code is required")]
+        public string PinCode { get; set; } = string.Empty;
+
+        public string Country { get; set; } = "India";
+
+        // Identity Information
+        public string AadhaarNumber { get; set; } = string.Empty;
+        public string PanNumber { get; set; } = string.Empty;
+        public string VoterIdNumber { get; set; } = string.Empty;
+        public string DrivingLicense { get; set; } = string.Empty;
+
+        // Banking Information
+        public string BankName { get; set; } = string.Empty;
+        public string AccountNumber { get; set; } = string.Empty;
+        public string IfscCode { get; set; } = string.Empty;
+        public string BranchName { get; set; } = string.Empty;
+
+        // Additional Information
+        public string Notes { get; set; } = string.Empty;
+    }
+}
