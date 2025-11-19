@@ -117,62 +117,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Replace with actual API call when endpoint is available
-        await Task.Delay(500); // Simulate loading
-
-        loans = new List<Loan>
+        try
         {
-            new Loan
+            var response = await Http.GetFromJsonAsync<ApiResponse<List<LoanApiDTO>>>("api/loans");
+            if (response?.Success == true && response.Data != null)
             {
-                Id = 1,
-                AccountNumber = "LN-001",
-                BorrowerName = "John Doe",
-                LoanAmount = 50000,
-                Balance = 45000,
-                Status = "Current",
-                DueDate = DateTime.Now.AddDays(15)
-            },
-            new Loan
-            {
-                Id = 2,
-                AccountNumber = "LN-002",
-                BorrowerName = "Jane Smith",
-                LoanAmount = 75000,
-                Balance = 30000,
-                Status = "Current",
-                DueDate = DateTime.Now.AddDays(7)
-            },
-            new Loan
-            {
-                Id = 3,
-                AccountNumber = "LN-003",
-                BorrowerName = "Robert Johnson",
-                LoanAmount = 100000,
-                Balance = 95000,
-                Status = "Delinquent",
-                DueDate = DateTime.Now.AddDays(-5)
-            },
-            new Loan
-            {
-                Id = 4,
-                AccountNumber = "LN-004",
-                BorrowerName = "Mary Williams",
-                LoanAmount = 60000,
-                Balance = 40000,
-                Status = "Current",
-                DueDate = DateTime.Now.AddDays(20)
-            },
-            new Loan
-            {
-                Id = 5,
-                AccountNumber = "LN-005",
-                BorrowerName = "James Brown",
-                LoanAmount = 80000,
-                Balance = 0,
-                Status = "PaidOff",
-                DueDate = DateTime.Now.AddDays(-30)
+                loans = response.Data.Select(l => new Loan
+                {
+                    Id = (int)l.Id,
+                    AccountNumber = l.AccountNumber,
+                    BorrowerName = l.BorrowerName,
+                    LoanAmount = l.DisbursedAmount,
+                    Balance = l.OutstandingAmount,
+                    Status = l.Status,
+                    DueDate = l.NextDueDate ?? DateTime.Now
+                }).ToList();
             }
-        };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading loans: {ex.Message}");
+            loans = new List<Loan>();
+        }
     }
 
     private List<Loan> GetFilteredLoans()
@@ -244,5 +210,25 @@
         public decimal Balance { get; set; }
         public string Status { get; set; } = string.Empty;
         public DateTime DueDate { get; set; }
+    }
+
+    private class LoanApiDTO
+    {
+        public long Id { get; set; }
+        public string AccountNumber { get; set; } = string.Empty;
+        public string BorrowerName { get; set; } = string.Empty;
+        public string ProductType { get; set; } = string.Empty;
+        public decimal DisbursedAmount { get; set; }
+        public decimal OutstandingAmount { get; set; }
+        public int DPD { get; set; }
+        public string Status { get; set; } = string.Empty;
+        public DateTime? NextDueDate { get; set; }
+    }
+
+    private class ApiResponse<T>
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
     }
 }

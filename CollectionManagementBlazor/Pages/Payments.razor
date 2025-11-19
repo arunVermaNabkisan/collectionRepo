@@ -191,79 +191,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Replace with actual API call when endpoint is available
-        // For now, using sample data
-        await Task.Delay(500); // Simulate loading
-
-        payments = new List<Payment>
+        try
         {
-            new Payment
+            var response = await Http.GetFromJsonAsync<ApiResponse<List<Payment>>>("api/payments");
+            if (response?.Success == true && response.Data != null)
             {
-                Id = 1,
-                TransactionId = "TXN-001",
-                PaymentDate = DateTime.Now.AddHours(-2),
-                BorrowerName = "John Doe",
-                AccountNumber = "LN-001",
-                Amount = 1500,
-                PaymentMethod = "Bank Transfer",
-                Status = "Completed"
-            },
-            new Payment
-            {
-                Id = 2,
-                TransactionId = "TXN-002",
-                PaymentDate = DateTime.Now.AddDays(-1),
-                BorrowerName = "Jane Smith",
-                AccountNumber = "LN-002",
-                Amount = 2000,
-                PaymentMethod = "UPI",
-                Status = "Completed"
-            },
-            new Payment
-            {
-                Id = 3,
-                TransactionId = "TXN-003",
-                PaymentDate = DateTime.Now.AddHours(-5),
-                BorrowerName = "Robert Johnson",
-                AccountNumber = "LN-003",
-                Amount = 500,
-                PaymentMethod = "Cash",
-                Status = "Pending"
-            },
-            new Payment
-            {
-                Id = 4,
-                TransactionId = "TXN-004",
-                PaymentDate = DateTime.Now.AddDays(-2),
-                BorrowerName = "Mary Williams",
-                AccountNumber = "LN-004",
-                Amount = 3500,
-                PaymentMethod = "Check",
-                Status = "Completed"
-            },
-            new Payment
-            {
-                Id = 5,
-                TransactionId = "TXN-005",
-                PaymentDate = DateTime.Now.AddHours(-1),
-                BorrowerName = "James Brown",
-                AccountNumber = "LN-005",
-                Amount = 1200,
-                PaymentMethod = "Bank Transfer",
-                Status = "Completed"
-            },
-            new Payment
-            {
-                Id = 6,
-                TransactionId = "TXN-006",
-                PaymentDate = DateTime.Now.AddDays(-3),
-                BorrowerName = "Patricia Garcia",
-                AccountNumber = "LN-006",
-                Amount = 800,
-                PaymentMethod = "UPI",
-                Status = "Failed"
+                payments = response.Data;
             }
-        };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading payments: {ex.Message}");
+            payments = new List<Payment>();
+        }
     }
 
     private List<Payment> GetFilteredPayments()
@@ -296,7 +236,7 @@
     {
         return status switch
         {
-            "Completed" => "success",
+            "Success" or "Completed" => "success",
             "Pending" => "pending",
             "Failed" => "danger",
             "Refunded" => "info",
@@ -307,7 +247,7 @@
     private decimal GetTotalPaymentsToday()
     {
         return payments
-            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed")
+            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && (p.Status == "Completed" || p.Status == "Success"))
             .Sum(p => p.Amount);
     }
 
@@ -319,7 +259,7 @@
     private decimal GetTotalRevenue()
     {
         return payments
-            .Where(p => p.Status == "Completed")
+            .Where(p => p.Status == "Completed" || p.Status == "Success")
             .Sum(p => p.Amount);
     }
 
@@ -337,13 +277,13 @@
 
     private int GetCompletedTodayCount()
     {
-        return payments.Count(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed");
+        return payments.Count(p => p.PaymentDate.Date == DateTime.Now.Date && (p.Status == "Completed" || p.Status == "Success"));
     }
 
     private decimal GetCompletedTodayAmount()
     {
         return payments
-            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && p.Status == "Completed")
+            .Where(p => p.PaymentDate.Date == DateTime.Now.Date && (p.Status == "Completed" || p.Status == "Success"))
             .Sum(p => p.Amount);
     }
 
@@ -357,5 +297,12 @@
         public decimal Amount { get; set; }
         public string PaymentMethod { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
+    }
+
+    private class ApiResponse<T>
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
     }
 }
