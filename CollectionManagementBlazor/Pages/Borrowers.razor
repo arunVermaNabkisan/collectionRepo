@@ -106,17 +106,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Replace with actual API call when endpoint is available
-        await Task.Delay(500); // Simulate loading
-
-        borrowers = new List<Borrower>
+        try
         {
-            new Borrower { Id = 1, Name = "John Doe", Email = "john.doe@example.com", Phone = "+91 98765 43210" },
-            new Borrower { Id = 2, Name = "Jane Smith", Email = "jane.smith@example.com", Phone = "+91 98765 43211" },
-            new Borrower { Id = 3, Name = "Robert Johnson", Email = "robert.j@example.com", Phone = "+91 98765 43212" },
-            new Borrower { Id = 4, Name = "Mary Williams", Email = "mary.w@example.com", Phone = "+91 98765 43213" },
-            new Borrower { Id = 5, Name = "James Brown", Email = "james.b@example.com", Phone = "+91 98765 43214" }
-        };
+            var response = await Http.GetFromJsonAsync<ApiResponse<List<Borrower>>>("api/customers");
+            if (response?.Success == true && response.Data != null)
+            {
+                borrowers = response.Data;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading borrowers: {ex.Message}");
+            borrowers = new List<Borrower>();
+        }
     }
 
     private List<Borrower> GetFilteredBorrowers()
@@ -153,5 +155,12 @@
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
+    }
+
+    private class ApiResponse<T>
+    {
+        public bool Success { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public T? Data { get; set; }
     }
 }
